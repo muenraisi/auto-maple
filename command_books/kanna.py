@@ -97,7 +97,7 @@ class Adjust(Command):
                     else:
                         key_down('down')
                         time.sleep(0.05)
-                        press('space', 3, down_time=0.1)
+                        press(config.KEYBOARD_JUMP, 3, down_time=0.1)
                         key_up('down')
                         time.sleep(0.05)
                     counter -= 1
@@ -114,11 +114,11 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['f1']
+        buffs = ['f8', 'f7', 'f6', 'f5', 'f4']
         now = time.time()
         if self.haku_time == 0 or now - self.haku_time > 490:
-            press('f4', 2)
-            press('f3', 2)
+            press('-', 2)
+            press('0', 2)
             self.haku_time = now
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:
             for key in buffs:
@@ -147,20 +147,20 @@ class Teleport(Command):
             time.sleep(0.05)
         if self.jump:
             if self.direction == 'down':
-                press('space', 3, down_time=0.1)
+                press(config.KEYBOARD_JUMP, 3, down_time=0.1)
             else:
-                press('space', 1)
+                press(config.KEYBOARD_JUMP, 1)
         if self.direction == 'up':
             key_down(self.direction)
             time.sleep(0.05)
-        press('e', num_presses)
+        press('pgdown', num_presses)
         key_up(self.direction)
         if config.record_layout:
             config.layout.add(*config.player_pos)
 
 
 class Shikigami(Command):
-    """Attacks using 'Shikigami Haunting' in a given direction."""
+    """[紫扇仰波]Attacks using 'Shikigami Haunting' in a given direction."""
 
     def __init__(self, direction, attacks=2, repetitions=1):
         self.name = 'Shikigami'
@@ -173,7 +173,7 @@ class Shikigami(Command):
         key_down(self.direction)
         time.sleep(0.05)
         for _ in range(self.repetitions):
-            press('r', self.attacks, up_time=0.05)
+            press('lshift', self.attacks, up_time=0.05)
         key_up(self.direction)
         if self.attacks > 2:
             time.sleep(0.3)
@@ -182,17 +182,17 @@ class Shikigami(Command):
 
 
 class Tengu(Command):
-    """Uses 'Tengu Strike' once."""
+    """[双天狗]Uses 'Tengu Strike' once."""
 
     def __init__(self):
         self.name = 'Tengu'
 
     def main(self):
-        press('q', 1)
+        press('a', 1)
 
 
 class Yaksha(Command):
-    """
+    """[鬼夜叉]
     Places 'Ghost Yaksha Boss' in a given direction, or towards the center of the map if
     no direction is specified.
     """
@@ -212,44 +212,44 @@ class Yaksha(Command):
                 press('left', 1, down_time=0.1, up_time=0.05)
             else:
                 press('right', 1, down_time=0.1, up_time=0.05)
-        press('2', 3)
+        press('q', 3)
 
 
 class Vanquisher(Command):
-    """Holds down 'Vanquisher's Charm' until this command is called again."""
+    """[破斜连击符]Holds down 'Vanquisher's Charm' until this command is called again."""
 
     def __init__(self):
         self.name = 'Vanquisher'
 
     def main(self):
-        key_up('f')
+        key_up('e')
         time.sleep(0.075)
-        key_down('f')
+        key_down('e')
         time.sleep(0.15)
 
 
 class Kishin(Command):
-    """Uses 'Kishin Shoukan' once."""
+    """[召唤式神]Uses 'Kishin Shoukan' once."""
 
     def __init__(self):
         self.name = 'Kishin'
 
     def main(self):
-        press('ctrl', 4, down_time=0.1, up_time=0.15)
+        press('w', 4, down_time=0.1, up_time=0.15)
 
 
 class NineTails(Command):
-    """Uses 'Nine-Tailed Fury' once."""
+    """[紫扇白狐]Uses 'Nine-Tailed Fury' once."""
 
     def __init__(self):
         self.name = 'NineTails'
 
     def main(self):
-        press('3', 3)
+        press('d', 3)
 
 
 class Exorcist(Command):
-    """Uses 'Exorcist's Charm' once."""
+    """[阴阳制灵符]Uses 'Exorcist's Charm' once."""
 
     def __init__(self, jump='False'):
         self.name = 'Exorcist'
@@ -257,12 +257,12 @@ class Exorcist(Command):
 
     def main(self):
         if self.jump:
-            press('space', 1, down_time=0.1, up_time=0.15)
-        press('w', 2, up_time=0.05)
+            press(config.KEYBOARD_JUMP, 1, down_time=0.1, up_time=0.15)
+        press('s', 2, up_time=0.05)
 
 
 class Domain(Command):
-    """Uses 'Spirit's Domain' once."""
+    """[召唤灵石]Uses 'Spirit's Domain' once."""
 
     def __init__(self):
         self.name = 'Domain'
@@ -272,33 +272,33 @@ class Domain(Command):
 
 
 class Legion(Command):
-    """Uses 'Ghost Yaksha: Great Oni Lord's Legion' once."""
+    """[鬼王]Uses 'Ghost Yaksha: Great Oni Lord's Legion' once."""
 
     def __init__(self):
         self.name = 'Legion'
 
     def main(self):
-        press('z', 2, down_time=0.1)
+        press('b', 2, down_time=0.1)
 
 
 class BlossomBarrier(Command):
-    """Places a 'Blossom Barrier' on the ground once."""
+    """[樱花结界]Places a 'Blossom Barrier' on the ground once."""
 
     def __init__(self):
         self.name = 'Blossom Barrier'
 
     def main(self):
-        press('g', 2)
+        press('c', 2)
 
 
 class Yukimusume(Command):
-    """Uses 'Yuki-musume Shoukan' once."""
+    """[雪女召唤]Uses 'Yuki-musume Shoukan' once."""
 
     def __init__(self):
         self.name = 'Yuki-musume'
 
     def main(self):
-        press('c', 2)
+        press('z', 2)
 
 
 class Balance(Command):
@@ -308,4 +308,4 @@ class Balance(Command):
         self.name = 'Mana Balance'
 
     def main(self):
-        press('lshift', 4)
+        press('2', 4)

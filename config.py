@@ -10,13 +10,15 @@ import cv2
 MONITOR = {'top': 0, 'left': 0, 'width': 1366, 'height': 768}
 
 # The distance between the top of the minimap and the top of the screen
-MINIMAP_TOP_BORDER = 21
+MINIMAP_TOP_BORDER = 4
 
 # The thickness of the other three borders of the minimap
 MINIMAP_BOTTOM_BORDER = 8
 
 # The bottom right corner of the minimap
-MINIMAP_TEMPLATE = cv2.imread('assets/minimap_template.jpg', 0)
+MINIMAP_TEMPLATE_BR = cv2.imread('assets/minimap_br.jpg', 0)
+# The topper left corner of the minimap
+MINIMAP_TEMPLATE_TL = cv2.imread('assets/minimap_tl.jpg', 0)
 
 # The player's symbol on the minimap
 PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)
@@ -97,3 +99,9 @@ record_layout = False
 
 # The amount of time (in seconds) to wait between each call to the 'buff' command
 buff_cooldown = 180
+
+#################################
+#      Keyboard Settings        #
+#################################
+
+KEYBOARD_JUMP="alt"

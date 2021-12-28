@@ -44,12 +44,16 @@ class Capture:
                 if not config.calibrated:
                     frame = np.array(sct.grab(config.MONITOR))
 
+                    tl, _ = utils.single_match(frame[:round(frame.shape[0] / 4),
+                                               :round(frame.shape[1] / 3)],
+                                               config.MINIMAP_TEMPLATE_TL)
+                    mm_tl = (tl[0]+8, tl[1]+20) # minimap top left
+
                     # Get the bottom right corner of the minimap
                     _, br = utils.single_match(frame[:round(frame.shape[0] / 4),
-                                                       :round(frame.shape[1] / 3)],
-                                                 config.MINIMAP_TEMPLATE)
-                    mm_tl = (config.MINIMAP_BOTTOM_BORDER, config.MINIMAP_TOP_BORDER)
-                    mm_br = tuple(max(75, a - config.MINIMAP_BOTTOM_BORDER) for a in br)
+                                               :round(frame.shape[1] / 3)],
+                                               config.MINIMAP_TEMPLATE_BR)
+                    mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br) # minimap bot right
                     config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
                     config.calibrated = True
                 else:
@@ -67,7 +71,7 @@ class Capture:
                         config.enabled = False
 
                     # Check for elite warning
-                    elite_frame = frame[height//4:3*height//4, width//4:3*width//4]
+                    elite_frame = frame[height // 4:3 * height // 4, width // 4:3 * width // 4]
                     elite = utils.multi_match(elite_frame, config.ELITE_TEMPLATE, threshold=0.9)
                     if config.enabled and not config.alert_active and elite:
                         config.alert_active = True
@@ -93,7 +97,7 @@ class Capture:
                     #########################################
                     #       Display useful information      #
                     #########################################
-                    minimap = Capture._rescale_frame(minimap, 2.0)
+                    minimap = Capture._rescale_frame(minimap, 2.5)
 
                     # Mark the position of the active rune
                     if config.rune_active:
@@ -127,8 +131,11 @@ class Capture:
                                3,
                                (255, 0, 0),
                                -1)
+                    winname='minimap'
+                    cv2.namedWindow(winname)  # Create a named window
+                    cv2.moveWindow(winname, 40, 30)  # Move it to (40,30)
                     cv2.imshow('minimap', minimap)
-                if cv2.waitKey(1) & 0xFF == 27:     # 27 is ASCII for the Esc key
+                if cv2.waitKey(1) & 0xFF == 27:  # 27 is ASCII for the Esc key
                     break
 
     @staticmethod

@@ -1,0 +1,14 @@
+s, adjust_tolerance, 0.0125
+
+*, 0.2, 0.452
+    shikigami, direction=right
+    yukimusume
+*, 0.4, 0.452
+    shikigami, direction=right
+    yukimusume
+*, 0.6, 0.452
+    shikigami, direction=left
+    yukimusume
+*, 0.8, 0.452
+    shikigami, direction=left
+    yukimusume

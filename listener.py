@@ -33,15 +33,15 @@ class Listener:
 
         while True:
             if config.listening:
-                if kb.is_pressed('insert'):
+                if kb.is_pressed('F9'):
                     Bot.toggle_enabled()
                     time.sleep(0.667)
-                elif kb.is_pressed('F6'):
+                elif kb.is_pressed('F10'):
                     Bot.load_routine(config.routine)
-                elif kb.is_pressed('F7'):
+                elif kb.is_pressed('F11'):
                     Bot.load_commands()
                     Bot.load_routine()
-                elif kb.is_pressed('F8'):
+                elif kb.is_pressed('F12'):
                     displayed_pos = tuple('{:.3f}'.format(round(i, 3)) for i in config.player_pos)
                     utils.print_separator()
                     print(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})')

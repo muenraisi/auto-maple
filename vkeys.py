@@ -33,6 +33,9 @@ key_map = {'tab': 0x09,     # Special Keys
            'pgup': 0x21,
            'pgdown': 0x22,
 
+            '-':0xBD,   # symbols
+            '=':0xBB,
+
            'left': 0x25,    # Arrow keys
            'up': 0x26,
            'right': 0x27,

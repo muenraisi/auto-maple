@@ -119,9 +119,9 @@ class Bot:
         :return:    None
         """
 
-        print('\nInitializing detection algorithm...\n')
-        model = detection.load_model()
-        print('\nInitialized detection algorithm.')
+        # print('\nInitializing detection algorithm...\n')
+        # model = detection.load_model()
+        # print('\nInitialized detection algorithm.')
 
         with mss.mss() as sct:
             config.ready = True
@@ -135,8 +135,8 @@ class Bot:
                     element = config.sequence[config.seq_index]
                     if isinstance(element, Point):
                         element.execute()
-                        if config.rune_active and element.location == config.rune_index:
-                            Bot._solve_rune(model, sct)
+                        # if config.rune_active and element.location == config.rune_index:
+                        #     Bot._solve_rune(model, sct)
                     Bot._step()
                 else:
                     time.sleep(0.01)
@@ -156,7 +156,7 @@ class Bot:
         adjust = config.command_book.get('adjust')
         adjust(*config.rune_pos).execute()
         time.sleep(0.2)
-        press('y', 1, down_time=0.2)        # Press 'y' to interact with rune in-game
+        press('space', 1, down_time=0.2)        # Press 'y' to interact with rune in-game
         print('\nSolving rune:')
         inferences = []
         for _ in range(15):
@@ -385,7 +385,8 @@ class Bot:
         the user.
         :return:    None
         """
-
+        # while True:
+        #     press("a", 1, down_time=0.1, up_time=0.5)
         config.rune_active = False
         config.alert_active = False
         utils.print_separator()

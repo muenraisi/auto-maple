@@ -1,0 +1,34 @@
+s, adjust_tolerance, 0.0125
+
+*, 0.242, 0.298
+    shikigami, direction=right
+    tengu
+    shikigami, direction=right
+    shikigami, direction=right
+*, 0.613, 0.298
+    tengu
+    shikigami, direction=right
+    shikigami, direction=right
+    shikigami, direction=right
+    exorcist
+*, 0.847, 0.298
+    shikigami, direction=left
+    shikigami, direction=left
+    tengu
+    shikigami, direction=left
+*, 0.847, 0.075
+    shikigami, direction=left
+    tengu
+    shikigami, direction=left
+    shikigami, direction=left
+*, 0.556, 0.075
+    shikigami, direction=left
+    tengu
+    shikigami, direction=left
+    shikigami, direction=left
+    exorcist
+*, 0.234, 0.075
+    shikigami, direction=right
+    shikigami, direction=right
+    tengu
+    shikigami, direction=right
