@@ -138,6 +138,7 @@ class Bot:
                         # if config.rune_active and element.location == config.rune_index:
                         #     Bot._solve_rune(model, sct)
                     Bot._step()
+                    press("ctrl",1)
                 else:
                     time.sleep(0.01)
 

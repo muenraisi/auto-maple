@@ -114,11 +114,10 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['f8', 'f7', 'f6', 'f5', 'f4']
+        buffs = ['f8', 'f7', 'f6', 'f5', 'f4','=','-','0','z']
         now = time.time()
-        if self.haku_time == 0 or now - self.haku_time > 490:
-            press('-', 2)
-            press('0', 2)
+        if self.haku_time == 0 or now - self.haku_time > 45:
+            press('d', 2)
             self.haku_time = now
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:
             for key in buffs:

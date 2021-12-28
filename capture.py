@@ -87,6 +87,7 @@ class Capture:
                     if not config.rune_active:
                         rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
                         if rune and config.sequence:
+                            config.alert_active = True # TODO: 在完成自动识别后取消
                             abs_rune_pos = (rune[0][0] - 1, rune[0][1])
                             config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
                             distances = list(map(Capture._distance_to_rune, config.sequence))
@@ -133,7 +134,7 @@ class Capture:
                                -1)
                     winname='minimap'
                     cv2.namedWindow(winname)  # Create a named window
-                    cv2.moveWindow(winname, 40, 30)  # Move it to (40,30)
+                    cv2.moveWindow(winname, 1400, 30)  # Move it to (1400,30)
                     cv2.imshow('minimap', minimap)
                 if cv2.waitKey(1) & 0xFF == 27:  # 27 is ASCII for the Esc key
                     break
