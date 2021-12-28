@@ -1,6 +1,10 @@
 __pycache__/
-assets/models/
 
 venv/**
 venv/*
 venv/
+/venv/
+/venv/Include/
+/venv/Lib/
+/venv/Scripts/
+/venv/pyvenv.cfg
