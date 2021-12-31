@@ -21,6 +21,7 @@ class Command:
 
         print(self)
         self.main()
+        # press("ctrl")
 
     def main(self):
         pass
@@ -103,6 +104,14 @@ class Fall(Command):
             counter -= 1
         key_up('down')
         time.sleep(0.1)
+
+
+class Pick(Command):
+    def __init__(self):
+        self.name = 'Pick'
+
+    def main(self):
+        key_down(';')
 
 
 #################################

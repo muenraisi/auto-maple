@@ -1,0 +1,32 @@
+s, adjust_tolerance, 0.0125
+
+*, 0.173, 0.253
+    shikigami, direction=right, attacks=3
+    tengu
+*, 0.520, 0.253
+    tengu
+    shikigami, direction=right, attacks=3
+    kishin
+*, 0.873, 0.253
+    shikigami, direction=left, attacks=3
+    tengu
+*, 0.873, 0.173
+    tengu
+    shikigami, direction=left, attacks=3
+    yaksha
+*, 0.687, 0.173, adjust=True
+    shikigami, direction=left, attacks=3
+    tengu
+    exorcist
+*, 0.687, 0.100
+    shikigami, direction=left, attacks=3
+    tengu
+*, 0.500, 0.120
+    shikigami, direction=left, attacks=3
+    tengu
+*, 0.280, 0.073
+    tengu
+    shikigami, direction=right, attacks=3
+*, 0.173, 0.173
+    shikigami, direction=right, attacks=3
+    tengu

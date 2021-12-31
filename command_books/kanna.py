@@ -114,7 +114,8 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['f8', 'f7', 'f6', 'f5', 'f4','=','-','0','z']
+        key_down('ctrl')
+        buffs = ['=', '-', '0', 'f8', 'f7', 'f6', 'f5', 'f4', 'z']
         now = time.time()
         if self.haku_time == 0 or now - self.haku_time > 45:
             press('d', 2)

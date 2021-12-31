@@ -77,6 +77,13 @@ class Capture:
                         config.alert_active = True
                         config.enabled = False
 
+                    # Check for mushroom princess # TODO: 在完成自动识别后取消
+                    mushroom_frame = frame[height // 2: height, 3 * width // 4:width]
+                    elite = utils.multi_match(mushroom_frame, config.MUSHROOM_TEMPLATE, threshold=0.9)
+                    if config.enabled and not config.alert_active and elite:
+                        config.alert_active = True
+                        config.enabled = False
+
                     # Crop the frame to only show the minimap
                     minimap = frame[mm_tl[1]:mm_br[1], mm_tl[0]:mm_br[0]]
                     player = utils.multi_match(minimap, config.PLAYER_TEMPLATE, threshold=0.8)
@@ -87,7 +94,7 @@ class Capture:
                     if not config.rune_active:
                         rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
                         if rune and config.sequence:
-                            config.alert_active = True # TODO: 在完成自动识别后取消
+                            config.pick_active=False
                             abs_rune_pos = (rune[0][0] - 1, rune[0][1])
                             config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
                             distances = list(map(Capture._distance_to_rune, config.sequence))

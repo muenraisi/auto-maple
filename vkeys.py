@@ -27,13 +27,18 @@ key_map = {'tab': 0x09,     # Special Keys
            'alt': 0x12,
            'space': 0x20,
            'lshift': 0xA0,
+           'lctrl': 0xA2,
            'ctrl': 0x11,
            'del': 0x2E,
            'end': 0x23,
            'pgup': 0x21,
            'pgdown': 0x22,
+           'back': 0x08,
+           'capital': 0x14,
 
-            '-':0xBD,   # symbols
+
+            ';':0xBA,   # symbols
+            '-':0xBD,
             '=':0xBB,
 
            'left': 0x25,    # Arrow keys

@@ -13,11 +13,11 @@ import inspect
 import commands
 import keyboard as kb
 import numpy as np
+import cv2
 from os import listdir
 from os.path import isfile, join, splitext
-from vkeys import press, click
+from vkeys import press, click, key_down, key_up
 from layout import Layout
-
 
 # A dictionary that maps each setting to its validator function
 SETTING_VALIDATORS = {'move_tolerance': float,
@@ -119,26 +119,27 @@ class Bot:
         :return:    None
         """
 
-        # print('\nInitializing detection algorithm...\n')
-        # model = detection.load_model()
-        # print('\nInitialized detection algorithm.')
+        print('\nInitializing detection algorithm...\n')
+        model = detection.load_model()
+        print('\nInitialized detection algorithm.')
 
         with mss.mss() as sct:
             config.ready = True
             config.listening = True
             buff = config.command_book['buff']()
+            pick = config.command_book['pick']()
             while True:
                 if config.alert_active:
                     Bot._alert()
                 if config.enabled:
-                    buff.main()
+                    buff.main()  # TODO: buff function should be improved to ensure buff in time
                     element = config.sequence[config.seq_index]
                     if isinstance(element, Point):
                         element.execute()
-                        # if config.rune_active and element.location == config.rune_index:
-                        #     Bot._solve_rune(model, sct)
+                        if config.rune_active and element.location == config.rune_index:
+                            print("发现符文")
+                            Bot._solve_rune(model, sct)
                     Bot._step()
-                    press("ctrl",1)
                 else:
                     time.sleep(0.01)
 
@@ -157,11 +158,13 @@ class Bot:
         adjust = config.command_book.get('adjust')
         adjust(*config.rune_pos).execute()
         time.sleep(0.2)
-        press('space', 1, down_time=0.2)        # Press 'y' to interact with rune in-game
+        press('space', 1, down_time=0.2)  # Press 'space' to interact with rune in-game
         print('\nSolving rune:')
         inferences = []
         for _ in range(15):
             frame = np.array(sct.grab(config.MONITOR))
+            now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
+            cv2.imwrite('./assets/runes/%s.jpg' % now_time, frame)
             solution = detection.merge_detection(model, frame)
             if solution:
                 print(', '.join(solution))
@@ -173,7 +176,7 @@ class Bot:
                     for _ in range(3):
                         time.sleep(0.3)
                         frame = np.array(sct.grab(config.MONITOR))
-                        rune_buff = utils.multi_match(frame[:frame.shape[0]//8, :],
+                        rune_buff = utils.multi_match(frame[:frame.shape[0] // 8, :],
                                                       config.RUNE_BUFF_TEMPLATE,
                                                       threshold=0.9)
                         if rune_buff:
@@ -183,6 +186,10 @@ class Bot:
                 elif len(solution) == 4:
                     inferences.append(solution)
         config.rune_active = False
+        time.wait(0.5)
+        if config.rune_active:
+            config.alert_active = True
+            config.alert_active = True
 
     @staticmethod
     def _alert():
@@ -237,6 +244,7 @@ class Bot:
         config.command_book['wait'] = commands.Wait
         config.command_book['walk'] = commands.Walk
         config.command_book['fall'] = commands.Fall
+        config.command_book['pick'] = commands.Pick
 
         # Check if required commands have been implemented
         success = True
@@ -290,9 +298,9 @@ class Bot:
             config.routine = file
             config.layout = Layout.load(file)
             print(f"Finished loading routine '{file}'.")
-            winsound.Beep(523, 200)     # C5
-            winsound.Beep(659, 200)     # E5
-            winsound.Beep(784, 200)     # G5
+            winsound.Beep(523, 200)  # C5
+            winsound.Beep(659, 200)  # E5
+            winsound.Beep(784, 200)  # G5
 
     @staticmethod
     def _eval(expr, n):
@@ -307,12 +315,12 @@ class Bot:
             first, rest = expr[0].lower(), expr[1:]
             args, kwargs = utils.separate_args(rest)
             line = f'Line {n}: '
-            if first == '@':        # Check for labels
+            if first == '@':  # Check for labels
                 if len(args) != 1 or len(kwargs) != 0:
                     print(line + 'Incorrect number of arguments for a label.')
                 else:
                     return args[0]
-            elif first == 's':      # Check for settings
+            elif first == 's':  # Check for settings
                 if len(args) != 2 or len(kwargs) != 0:
                     print(line + 'Incorrect number of arguments for a setting.')
                 else:
@@ -326,14 +334,14 @@ class Bot:
                             setattr(config, variable, value)
                         except ValueError:
                             print(line + f"'{value}' is not a valid value for '{variable}'.")
-            elif first == '*':      # Check for Points
+            elif first == '*':  # Check for Points
                 try:
                     return Point(*args, **kwargs)
                 except ValueError:
                     print(line + f'Invalid arguments for a Point: {args}, {kwargs}')
                 except TypeError:
                     print(line + 'Incorrect number of arguments for a Point.')
-            else:                   # Otherwise might be a Command
+            else:  # Otherwise might be a Command
                 if first not in config.command_book.keys():
                     print(line + f"Command '{first}' does not exist.")
                 else:
@@ -386,8 +394,6 @@ class Bot:
         the user.
         :return:    None
         """
-        # while True:
-        #     press("a", 1, down_time=0.1, up_time=0.5)
         config.rune_active = False
         config.alert_active = False
         utils.print_separator()
@@ -396,6 +402,8 @@ class Bot:
         print('#' * 18)
         config.enabled = not config.enabled
         if config.enabled:
-            winsound.Beep(784, 333)     # G5
+            config.pick_active = True
+            winsound.Beep(784, 333)  # G5
         else:
-            winsound.Beep(523, 333)     # C5
+            config.pick_active = False
+            winsound.Beep(523, 333)  # C5

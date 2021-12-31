@@ -33,7 +33,7 @@ class Listener:
 
         while True:
             if config.listening:
-                if kb.is_pressed('F9'):
+                if kb.is_pressed('f9'):
                     Bot.toggle_enabled()
                     time.sleep(0.667)
                 elif kb.is_pressed('F10'):

@@ -32,6 +32,9 @@ RUNE_BUFF_TEMPLATE = cv2.imread('assets/rune_buff_template.jpg', 0)
 # The Elite Boss's warning sign
 ELITE_TEMPLATE = cv2.imread('assets/elite_template.jpg', 0)
 
+# The Mushroom princess checking
+MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg',0)
+
 
 #################################
 #       Global Variables        #
@@ -56,6 +59,9 @@ mm_ratio = 1
 
 # Describes whether a rune has appeared in the game
 rune_active = False
+
+# Describes whether pick up things
+pick_active = False
 
 # The position of the rune relative to the minimap
 rune_pos = (0, 0)

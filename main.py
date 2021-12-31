@@ -5,6 +5,7 @@ import time
 from capture import Capture
 from listener import Listener
 from bot import Bot
+from picker import Picker
 
 
 cap = Capture()
@@ -18,6 +19,9 @@ config.ready = False
 
 listener = Listener()
 listener.start()
+
+picker = Picker()
+picker.start()
 
 bot = Bot()
 bot.start()
