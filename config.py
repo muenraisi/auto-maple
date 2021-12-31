@@ -2,7 +2,6 @@
 
 import cv2
 
-
 #################################
 #           CONSTANTS           #
 #################################
@@ -24,6 +23,9 @@ MINIMAP_TEMPLATE_TL = cv2.imread('assets/minimap_tl.jpg', 0)
 # The player's symbol on the minimap
 PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)
 
+# the bonus square on the screen
+BONUS_TEMPLATE = cv2.imread("assets/bonus_template.jpg", 0)
+
 # A rune's symbol on the minimap
 RUNE_TEMPLATE = cv2.imread('assets/rune_template.png', 0)
 
@@ -34,8 +36,7 @@ RUNE_BUFF_TEMPLATE = cv2.imread('assets/rune_buff_template.jpg', 0)
 ELITE_TEMPLATE = cv2.imread('assets/elite_template.jpg', 0)
 
 # The Mushroom princess checking
-MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg',0)
-
+MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg', 0)
 
 #################################
 #       Global Variables        #
@@ -91,6 +92,8 @@ routine = None
 # Stores the Layout object associated with the current routine
 layout = None
 
+# remember last time checking bonus box
+last_bonus = 0
 
 #################################
 #       Routine Settings        #
@@ -111,4 +114,4 @@ buff_cooldown = 180
 #      Keyboard Settings        #
 #################################
 
-KEYBOARD_JUMP="alt"
+KEYBOARD_JUMP = "alt"

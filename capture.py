@@ -6,7 +6,9 @@ import cv2
 import threading
 import numpy as np
 import utils
+import time
 from bot import Point
+from vkeys import click
 
 
 class Capture:
@@ -47,13 +49,13 @@ class Capture:
                     tl, _ = utils.single_match(frame[:round(frame.shape[0] / 4),
                                                :round(frame.shape[1] / 3)],
                                                config.MINIMAP_TEMPLATE_TL)
-                    mm_tl = (tl[0]+8, tl[1]+20) # minimap top left
+                    mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
 
                     # Get the bottom right corner of the minimap
                     _, br = utils.single_match(frame[:round(frame.shape[0] / 4),
                                                :round(frame.shape[1] / 3)],
                                                config.MINIMAP_TEMPLATE_BR)
-                    mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br) # minimap bot right
+                    mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br)  # minimap bot right
                     config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
                     config.calibrated = True
                 else:
@@ -94,13 +96,21 @@ class Capture:
                     if not config.rune_active:
                         rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
                         if rune and config.sequence:
-                            config.pick_active=False
+                            config.pick_active = False
                             abs_rune_pos = (rune[0][0] - 1, rune[0][1])
                             config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
                             distances = list(map(Capture._distance_to_rune, config.sequence))
                             index = np.argmin(distances)
                             config.rune_index = config.sequence[index].location
                             config.rune_active = True
+
+                    # TODO: to avoid action in capture
+                    now = time.time()
+                    if now - config.last_bonus > 29:
+                        config.last_bonus = now
+                        bonus = utils.multi_match(frame, config.PLAYER_TEMPLATE, threshold=0.8)
+                        if bonus:
+                            click((bonus[0][0] + 60, bonus[0][1] + 33))
 
                     #########################################
                     #       Display useful information      #
@@ -139,7 +149,7 @@ class Capture:
                                3,
                                (255, 0, 0),
                                -1)
-                    winname='minimap'
+                    winname = 'minimap'
                     cv2.namedWindow(winname)  # Create a named window
                     cv2.moveWindow(winname, 1400, 30)  # Move it to (1400,30)
                     cv2.imshow('minimap', minimap)
