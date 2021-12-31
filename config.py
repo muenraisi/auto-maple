@@ -7,7 +7,8 @@ import cv2
 #           CONSTANTS           #
 #################################
 # Describes the dimensions of the screen to capture with mss
-MONITOR = {'top': 0, 'left': 0, 'width': 1366, 'height': 768}
+# MONITOR = {'top': 0, 'left': 0, 'width': 1366, 'height': 768}
+MONITOR = {'top': 30, 'left': 0, 'width': 1370, 'height': 798}
 
 # The distance between the top of the minimap and the top of the screen
 MINIMAP_TOP_BORDER = 4

@@ -17,7 +17,7 @@ class Picker:
         :return:    None
         """
 
-        print('\nStarted keyboard listener.')
+        print('\nStarted Picker.')
         self.thread.start()
 
     @staticmethod

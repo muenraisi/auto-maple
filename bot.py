@@ -186,7 +186,7 @@ class Bot:
                 elif len(solution) == 4:
                     inferences.append(solution)
         config.rune_active = False
-        time.wait(0.5)
+        time.sleep(0.5)
         if config.rune_active:
             config.alert_active = True
             config.alert_active = True
