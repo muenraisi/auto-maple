@@ -95,6 +95,8 @@ class Capture:
                     # Check for a rune
                     if not config.rune_active:
                         rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
+                        if rune:
+                            config.alert_active = True
                         if rune and config.sequence:
                             config.pick_active = False
                             abs_rune_pos = (rune[0][0] - 1, rune[0][1])

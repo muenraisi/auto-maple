@@ -136,9 +136,9 @@ class Bot:
                     element = config.sequence[config.seq_index]
                     if isinstance(element, Point):
                         element.execute()
-                        if config.rune_active and element.location == config.rune_index:
-                            print("发现符文")
-                            Bot._solve_rune(model, sct)
+                        # if config.rune_active and element.location == config.rune_index:
+                        #     print("发现符文")
+                        #     Bot._solve_rune(model, sct)
                     Bot._step()
                 else:
                     time.sleep(0.01)
