@@ -14,7 +14,7 @@ import commands
 import keyboard as kb
 import numpy as np
 import cv2
-from os import listdir
+from os import listdir, makedirs
 from os.path import isfile, join, splitext
 from vkeys import press, click, key_down, key_up
 from layout import Layout
@@ -130,7 +130,7 @@ class Bot:
             pick = config.command_book['pick']()
             while True:
                 if config.alert_active:
-                    Bot._alert()
+                    Bot._alert(sct)
                 if config.enabled:
                     buff.main()  # TODO: buff function should be improved to ensure buff in time
                     element = config.sequence[config.seq_index]
@@ -163,8 +163,6 @@ class Bot:
         inferences = []
         for _ in range(15):
             frame = np.array(sct.grab(config.MONITOR))
-            now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
-            cv2.imwrite('./assets/runes/%s.jpg' % now_time, frame)
             solution = detection.merge_detection(model, frame)
             if solution:
                 print(', '.join(solution))
@@ -192,17 +190,23 @@ class Bot:
             config.alert_active = True
 
     @staticmethod
-    def _alert():
+    def _alert(sct):
         """
         Plays an alert to notify user of a dangerous event. Stops the alert
         once 'insert' is pressed.
         :return:    None
         """
-
+        Bot.toggle_enabled()
         config.listening = False
         Bot.alert.play(-1)
+        now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
+        makedirs('./assets/alerts/{}'.format(now_time), exist_ok=False)
+        count = 0
         while not kb.is_pressed('insert'):
             time.sleep(0.1)
+            count += 1
+            frame = np.array(sct.grab(config.MONITOR))
+            cv2.imwrite('./assets/alerts/{}/{}.jpg'.format(now_time, str(count).zfill(4)), frame)
         Bot.alert.stop()
         config.alert_active = False
         time.sleep(1)

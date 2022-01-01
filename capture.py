@@ -108,16 +108,18 @@ class Capture:
 
                     # TODO: to avoid action in capture
                     now = time.time()
-                    if now - config.last_checking_click > 29:
-                        config.last_checking_click = now
+                    if now - config.last_checking_click > 20:
                         # bonus box
-                        bonus = utils.multi_match(frame, config.PLAYER_TEMPLATE, threshold=0.8)
+                        bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
                         if bonus:
-                            click((bonus[0][0] + 60, bonus[0][1] + 33))
+                            print("detect bonus box")
+                            click((bonus[0][0] + 33, bonus[0][1] + 59))
                         # dialogue box
                         dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
                         if dialogue:
-                            click((dialogue[0][0] + 45, dialogue[0][1] + 8))
+                            print("detect dialogue box")
+                            click((dialogue[0][0] + 8, dialogue[0][1] + 45))
+                        config.last_checking_click = now
 
                     #########################################
                     #       Display useful information      #
