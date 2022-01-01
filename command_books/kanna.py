@@ -113,7 +113,7 @@ class Buff(Command):
         self.haku_time = 0
         self.buff_time = 0
 
-    def main(self):
+    def main(self, sct):
         key_down('ctrl')
         buffs = ['=', '-', '0', 'f8', 'f7', 'f6', 'f5', 'f4']
         now = time.time()

@@ -7,7 +7,7 @@ import cv2
 #################################
 # Describes the dimensions of the screen to capture with mss
 # MONITOR = {'top': 0, 'left': 0, 'width': 1366, 'height': 768}
-MONITOR = {'top': 30, 'left': 0, 'width': 1370, 'height': 798}
+MONITOR = {'top': 0, 'left': 0, 'width': 1400, 'height': 800}
 
 # The distance between the top of the minimap and the top of the screen
 MINIMAP_TOP_BORDER = 4
@@ -15,10 +15,18 @@ MINIMAP_TOP_BORDER = 4
 # The thickness of the other three borders of the minimap
 MINIMAP_BOTTOM_BORDER = 8
 
+
+#################################
+#           TEMPLATES           #
+#################################
+
 # The bottom right corner of the minimap
 MINIMAP_TEMPLATE_BR = cv2.imread('assets/minimap_br.jpg', 0)
 # The topper left corner of the minimap
 MINIMAP_TEMPLATE_TL = cv2.imread('assets/minimap_tl.jpg', 0)
+
+#
+HEADER_TEMPLATE = cv2.imread('assets/headre_tempalte.png',0)
 
 # The player's symbol on the minimap
 PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)

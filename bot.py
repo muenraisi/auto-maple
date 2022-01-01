@@ -95,7 +95,7 @@ class Bot:
 
         pygame.mixer.init()
         Bot.alert = pygame.mixer.music
-        Bot.alert.load('./assets/alert.mp3')
+        Bot.alert.load('./assets/风云插曲.mp3')
 
         Bot.load_commands()
         Bot.load_routine()
@@ -132,7 +132,7 @@ class Bot:
                 if config.alert_active:
                     Bot._alert(sct)
                 if config.enabled:
-                    buff.main()  # TODO: buff function should be improved to ensure buff in time
+                    buff.main(sct)  # TODO: buff function should be improved to ensure buff in time
                     element = config.sequence[config.seq_index]
                     if isinstance(element, Point):
                         element.execute()
@@ -187,7 +187,6 @@ class Bot:
         time.sleep(0.5)
         if config.rune_active:
             config.alert_active = True
-            config.alert_active = True
 
     @staticmethod
     def _alert(sct):
@@ -196,14 +195,14 @@ class Bot:
         once 'insert' is pressed.
         :return:    None
         """
-        Bot.toggle_enabled()
+        config.enabled = False
+        config.rune_active = False
         config.listening = False
         Bot.alert.play(-1)
         now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
         makedirs('./assets/alerts/{}'.format(now_time), exist_ok=False)
         count = 0
         while not kb.is_pressed('insert'):
-            time.sleep(0.1)
             count += 1
             frame = np.array(sct.grab(config.MONITOR))
             cv2.imwrite('./assets/alerts/{}/{}.jpg'.format(now_time, str(count).zfill(4)), frame)

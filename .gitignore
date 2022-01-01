@@ -8,3 +8,4 @@ venv/
 /venv/*
 /venv/
 /assets/models/
+/assets/alerts/
