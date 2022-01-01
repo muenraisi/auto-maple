@@ -26,6 +26,10 @@ PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)
 # the bonus square on the screen
 BONUS_TEMPLATE = cv2.imread("assets/bonus_template.jpg", 0)
 
+# the dialogue box on the screen
+DIALOGUE_TEMPLATE = cv2.imread("assets/dialogue_template.jpg", 0)
+
+
 # A rune's symbol on the minimap
 RUNE_TEMPLATE = cv2.imread('assets/rune_template.png', 0)
 
@@ -93,7 +97,7 @@ routine = None
 layout = None
 
 # remember last time checking bonus box
-last_bonus = 0
+last_checking_click = 0
 
 #################################
 #       Routine Settings        #
