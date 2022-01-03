@@ -126,12 +126,12 @@ class Capture:
                         bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
                         if bonus:
                             print("detect bonus box")
-                            click((bonus[0][0] + 33 + config.MONITOR["top"], bonus[0][1] + 59 + config.MONITOR["left"]))
+                            click(( bonus[0][1] + 59 + config.MONITOR["left"],bonus[0][0] + 33 + config.MONITOR["top"]))
                         # dialogue box
                         dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
                         if dialogue:
                             print("detect dialogue box")
-                            click((dialogue[0][0] + 8 + config.MONITOR["top"], dialogue[0][1] + 45+ config.MONITOR["left"]))
+                            click((dialogue[0][1] + 45+ config.MONITOR["left"], dialogue[0][0] + 8 + config.MONITOR["top"]))
                         config.last_checking_click = now
 
                     #########################################

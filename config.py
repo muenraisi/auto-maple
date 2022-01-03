@@ -89,6 +89,9 @@ rune_index = (0, 0)
 # Indicates whether a danger has been detected (Elite Boss, room change, etc)
 alert_active = False
 
+# screenshot
+screenshot = None
+
 # Stores all the Points and labels in the current user-defined routine
 sequence = []
 

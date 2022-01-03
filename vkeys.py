@@ -214,7 +214,7 @@ def press(key, n, down_time=0.05, up_time=0.1):
 def click(position, button='left'):
     """
     Simulate a mouse click with BUTTON at POSITION.
-    :param position:    The (x, y) position at which to click.
+    :param position:    The (x, y) (width, height) position at which to click.
     :param button:      Either the left or right mouse button.
     :return:            None
     """
