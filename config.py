@@ -26,7 +26,7 @@ MINIMAP_TEMPLATE_BR = cv2.imread('assets/minimap_br.jpg', 0)
 MINIMAP_TEMPLATE_TL = cv2.imread('assets/minimap_tl.jpg', 0)
 
 #
-HEADER_TEMPLATE = cv2.imread('assets/headre_tempalte.png',0)
+HEADER_TEMPLATE = cv2.imread('assets/header_template.png',0)
 
 # The player's symbol on the minimap
 PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)
@@ -65,6 +65,9 @@ ready = False
 # Describes whether the video capture has calibrated the minimap
 calibrated = False
 
+#
+cropped =False
+
 # Describes whether the keyboard listener is currently running
 listening = False
 
@@ -74,8 +77,8 @@ mm_ratio = 1
 # Describes whether a rune has appeared in the game
 rune_active = False
 
-# Describes whether pick up things
-pick_active = False
+# Describes whether pet active for pick, buff ...
+pet_active = False
 
 # The position of the rune relative to the minimap
 rune_pos = (0, 0)

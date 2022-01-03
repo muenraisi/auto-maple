@@ -114,13 +114,12 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self, sct):
-        key_down('ctrl')
-        buffs = ['=', '-', '0', 'f8', 'f7', 'f6', 'f5', 'f4']
+        buffs = ['-', '0', 'f8', 'f7', 'f6', 'f5', 'f4','5']
         now = time.time()
         if self.haku_time == 0 or now - self.haku_time > 46:
-            press('d', 2)
-            press('w', 2)
-            press('z', 2)
+            press('d', 2, up_time=0.3)
+            press('w', 2, up_time=0.3)
+            press('z', 2, up_time=0.3)
             press('q', 1)
             self.haku_time = now
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:

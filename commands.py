@@ -106,16 +106,6 @@ class Fall(Command):
         time.sleep(0.1)
 
 
-class Pick(Command):
-    def __init__(self):
-        self.name = 'Pick'
-
-    def main(self):
-        key_down(';')
-
-
-
-
 #################################
 #       Default Commands        #
 #################################

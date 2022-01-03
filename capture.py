@@ -46,25 +46,30 @@ class Capture:
                 if not config.calibrated:
                     frame = np.array(sct.grab(config.MONITOR))
 
-                    tl, _ = utils.single_match(frame[:frame.shape[0] // 4,
-                                               :frame.shape[1] // 3],
-                                               config.MINIMAP_TEMPLATE_TL)
-                    mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
+                    if not config.cropped:
+                        # crop the monitor to the game windows
+                        tl, br = utils.single_match(frame[:frame.shape[0] // 8,
+                                                    :],
+                                                    config.HEADER_TEMPLATE)
+                        config.MONITOR = {'top': br[1], 'left': tl[0], 'width': 1366, 'height': 768}
+                        config.cropped =True
+                    else:
 
-                    # Get the bottom right corner of the minimap
-                    _, br = utils.single_match(frame[:frame.shape[0] // 4,
-                                               :frame.shape[1] // 3],
-                                               config.MINIMAP_TEMPLATE_BR)
-                    mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br)  # minimap bot right
-                    config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
+                        tl, _ = utils.single_match(frame[:frame.shape[0] // 4,
+                                                   :frame.shape[1] // 3],
+                                                   config.MINIMAP_TEMPLATE_TL)
+                        mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
 
-                    # crop the monitor to the game windows
-                    tl, br = utils.single_match(frame[:frame.shape[0] // 8,
-                                                :],
-                                                config.HEADER_TEMPLATE)
-                    config.MONITOR= {'top': br[0], 'left': tl[1], 'width': 1366, 'height': 768}
+                        # Get the bottom right corner of the minimap
+                        _, br = utils.single_match(frame[:frame.shape[0] // 4,
+                                                   :frame.shape[1] // 3],
+                                                   config.MINIMAP_TEMPLATE_BR)
+                        mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br)  # minimap bot right
+                        config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
 
-                    config.calibrated = True
+
+
+                        config.calibrated = True
                 else:
                     #####################################
                     #       Monitor in-game events      #
@@ -106,7 +111,7 @@ class Capture:
                             config.alert_active = True
                             continue
                         if rune and config.sequence:
-                            config.pick_active = False
+                            config.pet_active = False
                             abs_rune_pos = (rune[0][0] - 1, rune[0][1])
                             config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
                             distances = list(map(Capture._distance_to_rune, config.sequence))
@@ -121,12 +126,12 @@ class Capture:
                         bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
                         if bonus:
                             print("detect bonus box")
-                            click((bonus[0][0] + 33, bonus[0][1] + 59))
+                            click((bonus[0][0] + 33 + config.MONITOR["top"], bonus[0][1] + 59 + config.MONITOR["left"]))
                         # dialogue box
                         dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
                         if dialogue:
                             print("detect dialogue box")
-                            click((dialogue[0][0] + 8, dialogue[0][1] + 45))
+                            click((dialogue[0][0] + 8 + config.MONITOR["top"], dialogue[0][1] + 45+ config.MONITOR["left"]))
                         config.last_checking_click = now
 
                     #########################################

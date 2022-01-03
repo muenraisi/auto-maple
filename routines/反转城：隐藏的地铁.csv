@@ -9,13 +9,13 @@ s, adjust_tolerance, 0.0125
 *, 0.860, 0.253
     shikigami, direction=left, attacks=3
     tengu
-*, 0.867, 0.173
+*, 0.867, 0.173, adjust=True
     shikigami, direction=left, attacks=3
     tengu
 *, 0.637, 0.153
     shikigami, direction=left, attacks=3
     tengu
-*, 0.607, 0.080, adjust=True
+*, 0.637, 0.080, adjust=True
     shikigami, direction=left, attacks=3
     tengu
 *, 0.407, 0.173

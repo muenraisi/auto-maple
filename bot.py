@@ -119,15 +119,14 @@ class Bot:
         :return:    None
         """
 
-        print('\nInitializing detection algorithm...\n')
-        model = detection.load_model()
-        print('\nInitialized detection algorithm.')
+        # print('\nInitializing detection algorithm...\n')
+        # model = detection.load_model()
+        # print('\nInitialized detection algorithm.')
 
         with mss.mss() as sct:
             config.ready = True
             config.listening = True
             buff = config.command_book['buff']()
-            pick = config.command_book['pick']()
             while True:
                 if config.alert_active:
                     Bot._alert(sct)
@@ -247,7 +246,6 @@ class Bot:
         config.command_book['wait'] = commands.Wait
         config.command_book['walk'] = commands.Walk
         config.command_book['fall'] = commands.Fall
-        config.command_book['pick'] = commands.Pick
 
         # Check if required commands have been implemented
         success = True
@@ -405,8 +403,8 @@ class Bot:
         print('#' * 18)
         config.enabled = not config.enabled
         if config.enabled:
-            config.pick_active = True
+            config.pet_active = True
             winsound.Beep(784, 333)  # G5
         else:
-            config.pick_active = False
+            config.pet_active = False
             winsound.Beep(523, 333)  # C5

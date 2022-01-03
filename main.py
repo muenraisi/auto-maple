@@ -5,7 +5,7 @@ import time
 from capture import Capture
 from listener import Listener
 from bot import Bot
-from picker import Picker
+from pet import Pet
 
 
 cap = Capture()
@@ -20,7 +20,7 @@ config.ready = False
 listener = Listener()
 listener.start()
 
-picker = Picker()
+picker = Pet()
 picker.start()
 
 bot = Bot()

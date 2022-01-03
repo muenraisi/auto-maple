@@ -1,39 +1,22 @@
 import time
-import config
-from vkeys import press, key_down
-
-
-# config.enabled=True
-# key_down("ctrl")
-# while True:
-#     time.sleep(1)
-import time
-
+import numpy as np
 import cv2
-import mss
-import numpy
 
 
-with mss.mss() as sct:
-    # Part of the screen to capture
-    monitor = {"top": 40, "left": 0, "width": 800, "height": 640}
-
-    while "Screen capturing":
-        last_time = time.time()
-
-        # Get raw pixels from the screen, save it to a Numpy array
-        img = numpy.array(sct.grab(monitor))
-
-        # Display the picture
-        cv2.imshow("OpenCV/Numpy normal", img)
-
-        # Display the picture in grayscale
-        # cv2.imshow('OpenCV/Numpy grayscale',
-        #            cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY))
-
-        print("fps: {}".format( (time.time() - last_time)))
-
-        # Press "q" to quit
-        if cv2.waitKey(25) & 0xFF == ord("q"):
-            cv2.destroyAllWindows()
+def bar_to_per(rgb):
+    rgb_mean = np.mean(rgb, axis=0).reshape(10, 17, 3).mean(axis=1)
+    dis = np.sum((rgb_mean - np.array([119, 113, 115])) ** 2, axis=1)
+    print(dis)
+    for i in range(len(dis)):
+        if dis[i] < 100:
             break
+    return i / len(dis)
+
+
+img = cv2.imread('temp.jpg')
+# cv2.imshow("hp&mp", img)
+hp = img[716:728, 611:781]
+hp_mean = bar_to_per(hp)
+print(hp_mean)
+
+# time.sleep(60)
