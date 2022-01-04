@@ -1,32 +1,22 @@
 s, adjust_tolerance, 0.0125
 
 *, 0.427, 0.253
-    shikigami, direction=right, attacks=3
-    tengu
+    multiattack, direction=right
 *, 0.653, 0.253
-    shikigami, direction=right, attacks=3
-    tengu
+    multiattack, direction=right
 *, 0.860, 0.253
-    shikigami, direction=left, attacks=3
-    tengu
+    multiattack, direction=left
 *, 0.867, 0.173, adjust=True
-    shikigami, direction=left, attacks=3
-    tengu
+    multiattack, direction=left
 *, 0.637, 0.153
-    shikigami, direction=left, attacks=3
-    tengu
+    multiattack, direction=left
 *, 0.637, 0.080, adjust=True
-    shikigami, direction=left, attacks=3
-    tengu
+    multiattack, direction=left
 *, 0.407, 0.173
-    shikigami, direction=left, attacks=3
-    tengu
+    multiattack, direction=left
 *, 0.187, 0.173
-    shikigami, direction=right, attacks=3
-    tengu
+    multiattack, direction=right
 *, 0.153, 0.080, adjust=True
-    shikigami, direction=right, attacks=3
-    tengu
+    multiattack, direction=right
 *, 0.187, 0.253
-    shikigami, direction=right, attacks=3
-    tengu
+    multiattack, direction=right

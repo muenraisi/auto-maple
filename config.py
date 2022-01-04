@@ -53,6 +53,9 @@ MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg', 0)
 #################################
 #       Global Variables        #
 #################################
+#
+player_status = {"hp": 100, "mp": 100}
+
 # The player's position relative to the minimap
 player_pos = (0, 0)
 

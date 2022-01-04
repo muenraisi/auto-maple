@@ -3,6 +3,17 @@ import time
 import threading
 from vkeys import press
 import utils
+import numpy as np
+import cv2
+
+
+def bar_to_per(img):
+    img_mean = np.mean(img[:, :, 0:3], axis=0).reshape(10, 17, 3).mean(axis=1)
+    dis = np.sum((img_mean - np.array([119, 113, 115])) ** 2, axis=1)
+    for i in range(len(dis)):
+        if dis[i] < 100:
+            break
+    return i / len(dis)
 
 
 class Pet:
@@ -29,14 +40,15 @@ class Pet:
         """
 
         while True:
-            if config.enabled:
-                Pet._get_points()
-            else:
-                time.sleep(0.01)
+            Pet._get_points()
 
     @staticmethod
-    @utils.run_if_enabled
     def _get_points():
-        press("ctrl", 1, down_time=0.025, up_time=0.05)
-        press("ctrl", 1, down_time=0.02, up_time=0.045)
-        press("ctrl", 1, down_time=0.03, up_time=0.055)
+        frame = config.frames[-1]
+        hp_img = frame[716:728, 611:781, :]
+        config.player_status["hp"] = bar_to_per(hp_img)
+        mp_img = frame[732:744, 611:781, :]
+        config.player_status["mp"] = bar_to_per(mp_img)
+        # cv2.imwrite("hp.jpg", hp_img)
+        # cv2.imwrite("mp.jpg", mp_img)
+        # time.sleep(10000)

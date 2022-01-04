@@ -6,4 +6,4 @@ while True:
     position = [500,1000]
     win32api.SetCursorPos(position)
     # click([1000,1000],"left")
-    time.sleep(1)
+    time.sleep(10)

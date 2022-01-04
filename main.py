@@ -7,6 +7,7 @@ from reader import Reader
 from listener import Listener
 from bot import Bot
 from picker import Picker
+from pet import Pet
 
 capture = Capture()
 capture.start()
@@ -22,6 +23,9 @@ config.ready = False
 
 listener = Listener()
 listener.start()
+
+pet = Pet()
+pet.start()
 
 bot = Bot()
 bot.start()

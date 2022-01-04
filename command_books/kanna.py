@@ -161,6 +161,23 @@ class Teleport(Command):
             config.layout.add(*config.player_pos)
 
 
+class MultiAttack(Command):
+    """[紫扇仰波]*3 + [双天狗]"""
+
+    def __init__(self, direction):
+        self.name = 'multiattack'
+        self.direction = utils.validate_horizontal_arrows(direction)
+
+    def main(self):
+        time.sleep(0.05)
+        press('a', 1, up_time=0.05)
+        key_down(self.direction)
+        press('lshift', 3, up_time=0.05)
+        key_up(self.direction)
+        press('a', 1, up_time=0.05)
+        time.sleep(0.3)
+
+
 class Shikigami(Command):
     """[紫扇仰波]Attacks using 'Shikigami Haunting' in a given direction."""
 

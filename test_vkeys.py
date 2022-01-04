@@ -15,7 +15,8 @@ def bar_to_per(rgb):
 
 img = cv2.imread('temp.jpg')
 # cv2.imshow("hp&mp", img)
-hp = img[716:728, 611:781]
+hp = img[732:744, 611:781]
+cv2.imwrite("test.jpg", hp)
 hp_mean = bar_to_per(hp)
 print(hp_mean)
 

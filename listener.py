@@ -45,5 +45,6 @@ class Listener:
                     displayed_pos = tuple('{:.3f}'.format(round(i, 3)) for i in config.player_pos)
                     utils.print_separator()
                     print(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})')
+                    print("hp: ",config.player_status["hp"], " and mp: ", config.player_status["mp"])
                     time.sleep(1)
             time.sleep(0.01)
