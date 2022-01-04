@@ -1,0 +1,49 @@
+s, adjust_tolerance, 0.0125
+
+@, big
+*, 0.377, 0.340, adjust=True
+    shikigami, direction=right, attacks=3
+    yukimusume
+*, 0.722, 0.340
+    shikigami, direction=left, attacks=3
+    yukimusume
+*, 0.852, 0.167, adjust=True
+    shikigami, direction=left, attacks=3
+    yukimusume
+*, 0.660, 0.185
+    shikigami, direction=left, attacks=3
+    yukimusume
+*, 0.432, 0.185
+    shikigami, direction=right, attacks=3
+    yukimusume
+*, 0.167, 0.179, adjust=True
+    shikigami, direction=right, attacks=3
+    yukimusume
+*, 0.340, 0.253, adjust=True
+    shikigami, direction=right, attacks=3
+    yukimusume
+*, 0.704, 0.253
+    shikigami, direction=left, attacks=3
+    yukimusume
+    goto, small
+
+@, small
+*, 0.722, 0.340, adjust=True
+    shikigami, direction=left, attacks=3
+    yukimusume
+*, 0.377, 0.340
+    shikigami, direction=right, attacks=3
+    yukimusume
+*, 0.432, 0.185
+    shikigami, direction=right, attacks=3
+    yukimusume
+*, 0.660, 0.185
+    shikigami, direction=left, attacks=3
+    yukimusume
+*, 0.704, 0.253, adjust=True
+    shikigami, direction=left, attacks=3
+    yukimusume
+*, 0.340, 0.253
+    shikigami, direction=right, attacks=3
+    yukimusume
+    goto, big

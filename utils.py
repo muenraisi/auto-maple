@@ -87,7 +87,7 @@ def multi_match(frame, template, threshold=0.95):
     :param frame:       The image in which to search.
     :param template:    The template to match with.
     :param threshold:   The minimum percentage of TEMPLATE that each result must match.
-    :return:            An array of matches that exceed THRESHOLD.
+    :return:            An array of matches that exceed THRESHOLD, coordinate of the center.
     """
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

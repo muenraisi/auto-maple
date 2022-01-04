@@ -123,32 +123,29 @@ class Bot:
         # model = detection.load_model()
         # print('\nInitialized detection algorithm.')
 
-        with mss.mss() as sct:
-            config.ready = True
-            config.listening = True
-            buff = config.command_book['buff']()
-            while True:
-                if config.alert_active:
-                    Bot._alert(sct)
-                if config.enabled:
-                    buff.main(sct)  # TODO: buff function should be improved to ensure buff in time
-                    element = config.sequence[config.seq_index]
-                    if isinstance(element, Point):
-                        element.execute()
-                        # if config.rune_active and element.location == config.rune_index:
-                        #     print("发现符文")
-                        #     Bot._solve_rune(model, sct)
-                    Bot._step()
-                else:
-                    time.sleep(0.01)
+        config.listening = True
+        buff = config.command_book['buff']()
+        while True:
+            if config.alert_active:
+                Bot._alert()
+            if config.enabled:
+                buff.main()  # TODO: buff function should be improved to ensure buff in time
+                element = config.sequence[config.seq_index]
+                if isinstance(element, Point):
+                    element.execute()
+                    # if config.rune_active and element.location == config.rune_index:
+                    #     print("发现符文")
+                    #     Bot._solve_rune(model, sct)
+                Bot._step()
+            else:
+                time.sleep(0.01)
 
     @staticmethod
     @utils.run_if_enabled
-    def _solve_rune(model, sct):
+    def _solve_rune(model):
         """
         Moves to the position of the rune and solves the arrow-key puzzle.
         :param model:   The TensorFlow model to classify with.
-        :param sct:     The mss instance object with which to take screenshots.
         :return:        None
         """
 
@@ -161,7 +158,7 @@ class Bot:
         print('\nSolving rune:')
         inferences = []
         for _ in range(15):
-            frame = np.array(sct.grab(config.MONITOR))
+            frame = config.frames[-1]
             solution = detection.merge_detection(model, frame)
             if solution:
                 print(', '.join(solution))
@@ -172,7 +169,7 @@ class Bot:
                     time.sleep(1)
                     for _ in range(3):
                         time.sleep(0.3)
-                        frame = np.array(sct.grab(config.MONITOR))
+                        frame = config.frames[-1]
                         rune_buff = utils.multi_match(frame[:frame.shape[0] // 8, :],
                                                       config.RUNE_BUFF_TEMPLATE,
                                                       threshold=0.9)
@@ -188,7 +185,7 @@ class Bot:
             config.alert_active = True
 
     @staticmethod
-    def _alert(sct):
+    def _alert():
         """
         Plays an alert to notify user of a dangerous event. Stops the alert
         once 'insert' is pressed.
@@ -203,8 +200,7 @@ class Bot:
         count = 0
         while not kb.is_pressed('insert'):
             count += 1
-            frame = np.array(sct.grab(config.MONITOR))
-            cv2.imwrite('./assets/alerts/{}/{}.jpg'.format(now_time, str(count).zfill(4)), frame)
+            cv2.imwrite('./assets/alerts/{}/{}.jpg'.format(now_time, str(count).zfill(4)), config.frames[-1])
         Bot.alert.stop()
         config.alert_active = False
         time.sleep(1)

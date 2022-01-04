@@ -40,143 +40,134 @@ class Capture:
         :return:    None
         """
 
-        with mss.mss() as sct:
-            config.ready = True
-            while True:
-                if not config.calibrated:
-                    frame = np.array(sct.grab(config.MONITOR))
+        while True:
+            if not config.cropped or len(config.frames) == 0:
+                time.sleep(0.01)
+                continue
+            frame = config.frames[-1]
+            if not config.calibrated:
+                tl, _ = utils.single_match(frame[:frame.shape[0] // 4,
+                                           :frame.shape[1] // 3],
+                                           config.MINIMAP_TEMPLATE_TL)
+                mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
 
-                    if not config.cropped:
-                        # crop the monitor to the game windows
-                        tl, br = utils.single_match(frame[:frame.shape[0] // 8,
-                                                    :],
-                                                    config.HEADER_TEMPLATE)
-                        config.MONITOR = {'top': br[1], 'left': tl[0], 'width': 1366, 'height': 768}
-                        config.cropped =True
-                    else:
+                # Get the bottom right corner of the minimap
+                _, br = utils.single_match(frame[:frame.shape[0] // 4,
+                                           :frame.shape[1] // 3],
+                                           config.MINIMAP_TEMPLATE_BR)
+                mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br)  # minimap bot right
+                config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
 
-                        tl, _ = utils.single_match(frame[:frame.shape[0] // 4,
-                                                   :frame.shape[1] // 3],
-                                                   config.MINIMAP_TEMPLATE_TL)
-                        mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
+                config.calibrated = True
+                config.ready = True
+            else:
+                #####################################
+                #       Monitor in-game events      #
+                #####################################
+                height, width, _ = frame.shape
 
-                        # Get the bottom right corner of the minimap
-                        _, br = utils.single_match(frame[:frame.shape[0] // 4,
-                                                   :frame.shape[1] // 3],
-                                                   config.MINIMAP_TEMPLATE_BR)
-                        mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br)  # minimap bot right
-                        config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
+                # Check for unexpected black screen regardless of whether bot is enabled
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                if config.enabled and not config.alert_active \
+                        and np.count_nonzero(gray < 15) / height / width > 0.95:
+                    config.alert_active = True
+                    config.enabled = False
 
+                # Check for elite warning
+                elite_frame = frame[height // 4:3 * height // 4, width // 4:3 * width // 4]
+                elite = utils.multi_match(elite_frame, config.ELITE_TEMPLATE, threshold=0.9)
+                if config.enabled and not config.alert_active and elite:
+                    config.alert_active = True
+                    config.enabled = False
 
+                # Check for mushroom princess # TODO: 在完成自动识别后取消
+                mushroom_frame = frame[height // 2: height, 3 * width // 4:width]
+                elite = utils.multi_match(mushroom_frame, config.MUSHROOM_TEMPLATE, threshold=0.9)
+                if config.enabled and not config.alert_active and elite:
+                    config.alert_active = True
+                    config.enabled = False
 
-                        config.calibrated = True
-                else:
-                    #####################################
-                    #       Monitor in-game events      #
-                    #####################################
-                    frame = np.array(sct.grab(config.MONITOR))
-                    height, width, _ = frame.shape
+                # Crop the frame to only show the minimap
+                minimap = frame[mm_tl[1]:mm_br[1], mm_tl[0]:mm_br[0]]
+                player = utils.multi_match(minimap, config.PLAYER_TEMPLATE, threshold=0.8)
+                if player:
+                    config.player_pos = utils.convert_to_relative(player[0], minimap)
 
-                    # Check for unexpected black screen regardless of whether bot is enabled
-                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                    if config.enabled and not config.alert_active \
-                            and np.count_nonzero(gray < 15) / height / width > 0.95:
+                # Check for a rune
+                if not config.rune_active:
+                    rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
+                    if rune:
                         config.alert_active = True
-                        config.enabled = False
+                        continue
+                    if rune and config.sequence:
+                        config.pet_active = False
+                        abs_rune_pos = (rune[0][0] - 1, rune[0][1])
+                        config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
+                        distances = list(map(Capture._distance_to_rune, config.sequence))
+                        index = np.argmin(distances)
+                        config.rune_index = config.sequence[index].location
+                        config.rune_active = True
 
-                    # Check for elite warning
-                    elite_frame = frame[height // 4:3 * height // 4, width // 4:3 * width // 4]
-                    elite = utils.multi_match(elite_frame, config.ELITE_TEMPLATE, threshold=0.9)
-                    if config.enabled and not config.alert_active and elite:
-                        config.alert_active = True
-                        config.enabled = False
+                # TODO: to avoid action in capture
+                now = time.time()
+                if now - config.last_checking_click > 20:
+                    # bonus box
+                    bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
+                    if bonus:
+                        print("detect bonus box")
+                        for _ in range(3):
+                            click((bonus[0][1] + config.MONITOR["left"], bonus[0][0] + config.MONITOR["top"]))
+                    # dialogue box
+                    dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
+                    if dialogue:
+                        print("detect dialogue box")
+                        for _ in range(3):
+                            click((dialogue[0][1] + config.MONITOR["left"], dialogue[0][0] + config.MONITOR["top"]))
+                    config.last_checking_click = now
 
-                    # Check for mushroom princess # TODO: 在完成自动识别后取消
-                    mushroom_frame = frame[height // 2: height, 3 * width // 4:width]
-                    elite = utils.multi_match(mushroom_frame, config.MUSHROOM_TEMPLATE, threshold=0.9)
-                    if config.enabled and not config.alert_active and elite:
-                        config.alert_active = True
-                        config.enabled = False
+                #########################################
+                #       Display useful information      #
+                #########################################
+                minimap = Capture._rescale_frame(minimap, 2.5)
 
-                    # Crop the frame to only show the minimap
-                    minimap = frame[mm_tl[1]:mm_br[1], mm_tl[0]:mm_br[0]]
-                    player = utils.multi_match(minimap, config.PLAYER_TEMPLATE, threshold=0.8)
-                    if player:
-                        config.player_pos = utils.convert_to_relative(player[0], minimap)
-
-                    # Check for a rune
-                    if not config.rune_active:
-                        rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
-                        if rune:
-                            config.alert_active = True
-                            continue
-                        if rune and config.sequence:
-                            config.pet_active = False
-                            abs_rune_pos = (rune[0][0] - 1, rune[0][1])
-                            config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
-                            distances = list(map(Capture._distance_to_rune, config.sequence))
-                            index = np.argmin(distances)
-                            config.rune_index = config.sequence[index].location
-                            config.rune_active = True
-
-                    # TODO: to avoid action in capture
-                    now = time.time()
-                    if now - config.last_checking_click > 20:
-                        # bonus box
-                        bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
-                        if bonus:
-                            print("detect bonus box")
-                            click(( bonus[0][1] + 59 + config.MONITOR["left"],bonus[0][0] + 33 + config.MONITOR["top"]))
-                        # dialogue box
-                        dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
-                        if dialogue:
-                            print("detect dialogue box")
-                            click((dialogue[0][1] + 45+ config.MONITOR["left"], dialogue[0][0] + 8 + config.MONITOR["top"]))
-                        config.last_checking_click = now
-
-                    #########################################
-                    #       Display useful information      #
-                    #########################################
-                    minimap = Capture._rescale_frame(minimap, 2.5)
-
-                    # Mark the position of the active rune
-                    if config.rune_active:
-                        cv2.circle(minimap,
-                                   utils.convert_to_absolute(config.rune_pos, minimap),
-                                   5,
-                                   (128, 0, 128),
-                                   -1)
-
-                    # Draw the current path that the program is taking
-                    path = config.path
-                    if config.enabled and len(path) > 1:
-                        for i in range(len(path) - 1):
-                            start = utils.convert_to_absolute(path[i], minimap)
-                            end = utils.convert_to_absolute(path[i + 1], minimap)
-                            cv2.line(minimap, start, end, (255, 255, 0), 1)
-
-                    # Draw each Point in the routine as a circle
-                    for p in config.sequence:
-                        Capture._draw_point(minimap,
-                                            p,
-                                            (0, 255, 0) if config.enabled else (0, 0, 255))
-
-                    # Display the current Layout
-                    if config.layout:
-                        config.layout.draw(minimap)
-
-                    # Draw the player's position on top of everything
+                # Mark the position of the active rune
+                if config.rune_active:
                     cv2.circle(minimap,
-                               utils.convert_to_absolute(config.player_pos, minimap),
-                               3,
-                               (255, 0, 0),
+                               utils.convert_to_absolute(config.rune_pos, minimap),
+                               5,
+                               (128, 0, 128),
                                -1)
-                    winname = 'minimap'
-                    cv2.namedWindow(winname)  # Create a named window
-                    cv2.moveWindow(winname, 1400, 30)  # Move it to (1400,30)
-                    cv2.imshow('minimap', minimap)
-                if cv2.waitKey(1) & 0xFF == 27:  # 27 is ASCII for the Esc key
-                    break
+
+                # Draw the current path that the program is taking
+                path = config.path
+                if config.enabled and len(path) > 1:
+                    for i in range(len(path) - 1):
+                        start = utils.convert_to_absolute(path[i], minimap)
+                        end = utils.convert_to_absolute(path[i + 1], minimap)
+                        cv2.line(minimap, start, end, (255, 255, 0), 1)
+
+                # Draw each Point in the routine as a circle
+                for p in config.sequence:
+                    Capture._draw_point(minimap,
+                                        p,
+                                        (0, 255, 0) if config.enabled else (0, 0, 255))
+
+                # Display the current Layout
+                if config.layout:
+                    config.layout.draw(minimap)
+
+                # Draw the player's position on top of everything
+                cv2.circle(minimap,
+                           utils.convert_to_absolute(config.player_pos, minimap),
+                           3,
+                           (255, 0, 0),
+                           -1)
+                winname = 'minimap'
+                cv2.namedWindow(winname)  # Create a named window
+                cv2.moveWindow(winname, 1400, 30)  # Move it to (1400,30)
+                cv2.imshow('minimap', minimap)
+            if cv2.waitKey(1) & 0xFF == 27:  # 27 is ASCII for the Esc key
+                break
 
     @staticmethod
     def _count(frame, threshold):

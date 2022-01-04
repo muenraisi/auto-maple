@@ -29,11 +29,10 @@ class Camera:
         Constantly listens for user inputs and updates variables in config accordingly.
         :return:    None
         """
+        config.frames = deque(maxlen=10)
         with mss.mss() as sct:
-            config.screenshot = deque(maxlen=10)
-            if not config.calibrated:
+            while True:
                 frame = np.array(sct.grab(config.MONITOR))
-
                 if not config.cropped:
                     # crop the monitor to the game windows
                     tl, br = utils.single_match(frame[:frame.shape[0] // 8,
@@ -42,4 +41,4 @@ class Camera:
                     config.MONITOR = {'top': br[1], 'left': tl[0], 'width': 1366, 'height': 768}
                     config.cropped = True
                 else:
-                    config.screenshot.append(frame)
+                    config.frames.append(frame)

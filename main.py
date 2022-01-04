@@ -2,11 +2,15 @@
 
 import config
 import time
+from camera import Camera
 from capture import Capture
 from listener import Listener
 from bot import Bot
 from pet import Pet
 
+
+camera = Camera()
+camera.start()
 
 cap = Capture()
 cap.start()
@@ -20,11 +24,13 @@ config.ready = False
 listener = Listener()
 listener.start()
 
-picker = Pet()
-picker.start()
-
 bot = Bot()
 bot.start()
+
+pet = Pet()
+pet.start()
+
+
 
 while not config.ready:
     time.sleep(0.01)

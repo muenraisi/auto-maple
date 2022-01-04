@@ -90,7 +90,7 @@ rune_index = (0, 0)
 alert_active = False
 
 # screenshot
-screenshot = None
+frames = None
 
 # Stores all the Points and labels in the current user-defined routine
 sequence = []
