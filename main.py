@@ -2,18 +2,17 @@
 
 import config
 import time
-from camera import Camera
 from capture import Capture
+from reader import Reader
 from listener import Listener
 from bot import Bot
 from pet import Pet
 
+capture = Capture()
+capture.start()
 
-camera = Camera()
-camera.start()
-
-cap = Capture()
-cap.start()
+reader = Reader()
+reader.start()
 
 # Wait for the video capture to initialize
 while not config.ready:
@@ -29,8 +28,6 @@ bot.start()
 
 pet = Pet()
 pet.start()
-
-
 
 while not config.ready:
     time.sleep(0.01)
