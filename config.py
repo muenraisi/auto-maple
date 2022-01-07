@@ -1,7 +1,12 @@
 """A collection of variables shared across multiple modules."""
 
 import cv2
+# import ctypes
+# user32 = ctypes.windll.user32
+#
+# SCREENSIZE = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
 
+RESOLUTION = (1920, 1080)
 #################################
 #           CONSTANTS           #
 #################################
@@ -79,9 +84,6 @@ mm_ratio = 1
 
 # Describes whether a rune has appeared in the game
 rune_active = False
-
-# Describes whether pet active for pick, buff ...
-pet_active = False
 
 # The position of the rune relative to the minimap
 rune_pos = (0, 0)

@@ -5,6 +5,7 @@ import time
 import utils
 import threading
 import keyboard as kb
+import os
 from bot import Bot
 
 
@@ -39,12 +40,18 @@ class Listener:
                 elif kb.is_pressed('F10'):
                     Bot.load_routine(config.routine)
                 elif kb.is_pressed('F11'):
+                    config.calibrated = False
                     Bot.load_commands()
                     Bot.load_routine()
                 elif kb.is_pressed('F12'):
                     displayed_pos = tuple('{:.3f}'.format(round(i, 3)) for i in config.player_pos)
                     utils.print_separator()
                     print(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})')
+                    with open('temp.txt', 'a') as f:
+                        f.write(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})\n')
                     print("hp: ",config.player_status["hp"], " and mp: ", config.player_status["mp"])
-                    time.sleep(1)
+                    time.sleep(0.5)
+                elif kb.is_pressed('Esc'):
+                    print("Closed by keyboard.")
+                    os._exit(0)
             time.sleep(0.01)

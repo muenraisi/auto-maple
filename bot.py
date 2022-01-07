@@ -133,9 +133,10 @@ class Bot:
                 element = config.sequence[config.seq_index]
                 if isinstance(element, Point):
                     element.execute()
-                    # if config.rune_active and element.location == config.rune_index:
-                    #     print("发现符文")
-                    #     Bot._solve_rune(model, sct)
+                    if config.rune_active and element.location == config.rune_index:
+                        print("发现符文")
+                        config.alert_active = True
+                        # Bot._solve_rune(model, sct)
                 Bot._step()
             else:
                 time.sleep(0.01)
@@ -399,8 +400,8 @@ class Bot:
         print('#' * 18)
         config.enabled = not config.enabled
         if config.enabled:
-            config.pet_active = True
+            config.pick_active = True
             winsound.Beep(784, 333)  # G5
         else:
-            config.pet_active = False
+            config.pick_active = False
             winsound.Beep(523, 333)  # C5

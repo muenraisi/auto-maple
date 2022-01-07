@@ -96,11 +96,7 @@ class Reader:
                 # Check for a rune
                 if not config.rune_active:
                     rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
-                    if rune:
-                        config.alert_active = True
-                        continue
                     if rune and config.sequence:
-                        config.pet_active = False
                         abs_rune_pos = (rune[0][0] - 1, rune[0][1])
                         config.rune_pos = utils.convert_to_relative(abs_rune_pos, minimap)
                         distances = list(map(Reader._distance_to_rune, config.sequence))
@@ -110,19 +106,20 @@ class Reader:
 
                 # TODO: to avoid action in capture
                 now = time.time()
-                if now - config.last_checking_click > 20:
+                if now - config.last_checking_click > 10:
                     # bonus box
                     bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
                     if bonus:
                         print("detect bonus box")
                         for _ in range(3):
-                            click((bonus[0][1] + config.MONITOR["left"], bonus[0][0] + config.MONITOR["top"]))
+                            click((bonus[0][0] + config.MONITOR["left"],
+                                   bonus[0][1] + config.MONITOR["top"]))
                     # dialogue box
                     dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
                     if dialogue:
-                        print("detect dialogue box")
                         for _ in range(3):
-                            click((dialogue[0][1] + config.MONITOR["left"], dialogue[0][0] + config.MONITOR["top"]))
+                            click((dialogue[0][0] + config.MONITOR["left"],
+                                   dialogue[0][1] + config.MONITOR["top"]))
                     config.last_checking_click = now
 
                 #########################################

@@ -31,6 +31,7 @@ key_map = {'tab': 0x09,     # Special Keys
            'ctrl': 0x11,
            'del': 0x2E,
            'end': 0x23,
+           'home': 0x24,
            'pgup': 0x21,
            'pgdown': 0x22,
            'back': 0x08,
@@ -208,7 +209,6 @@ def press(key, n, down_time=0.05, up_time=0.1):
         time.sleep(down_time * (0.8 + 0.4 * random()))
         key_up(key)
         time.sleep(up_time * (0.8 + 0.4 * random()))
-
 
 @utils.run_if_enabled
 def click(position, button='left'):
