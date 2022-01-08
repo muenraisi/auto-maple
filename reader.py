@@ -82,8 +82,8 @@ class Reader:
 
                 # Check for mushroom princess # TODO: 在完成自动识别后取消
                 mushroom_frame = frame[height // 2: height, 3 * width // 4:width]
-                elite = utils.multi_match(mushroom_frame, config.MUSHROOM_TEMPLATE, threshold=0.9)
-                if config.enabled and not config.alert_active and elite:
+                mushroom = utils.multi_match(mushroom_frame, config.MUSHROOM_TEMPLATE, threshold=0.9)
+                if config.enabled and not config.alert_active and mushroom:
                     config.alert_active = True
                     config.enabled = False
 

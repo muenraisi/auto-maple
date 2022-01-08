@@ -64,7 +64,7 @@ class Pet:
         if config.player_status["hp"] < 0.5:
             print("hp is ", config.player_status["hp"], "add hp")
             press("home", 1)
-        if config.player_status["mp"] < 0.5:
+        if config.player_status["mp"] < 0.2:
             print("mp is ", config.player_status["mp"], "add mp")
             press("2", 1)
         time.sleep(5)

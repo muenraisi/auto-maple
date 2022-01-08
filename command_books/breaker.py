@@ -117,7 +117,7 @@ class Buff(Command):
         now = time.time()
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:
             for key in buffs:
-                press(key, 3, up_time=0.3)
+                press(key, 2, up_time=0.3)
             self.buff_time = now
 
 
@@ -152,7 +152,7 @@ class MultiAttack(Command):
         key_down(self.direction)
         time.sleep(0.05)
         for _ in range(self.repetitions):
-            press('lshift', self.attacks, up_time=0.05)
+            press('lshift', self.attacks, up_time=0.2)
         key_up(self.direction)
         if self.attacks > 2:
             time.sleep(0.3)
