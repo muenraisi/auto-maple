@@ -42,6 +42,7 @@ class Pet:
             Pet._check_status()
 
     @staticmethod
+    @utils.run_if_enabled
     def _check_status():
         frame = config.frames[-1]
         hp_img = frame[716:728, 611:781, :]

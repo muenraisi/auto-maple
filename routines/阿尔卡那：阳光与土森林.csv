@@ -2,23 +2,23 @@ s, adjust_tolerance, 0.0125
 s, move_tolerance, 0.06
 
 *, 0.852, 0.259
-    multiattack, direction=right
+    multiattack, direction=left
 *, 0.684, 0.259
-    multiattack, direction=right
+    multiattack, direction=left
 *, 0.499, 0.259
-    multiattack, direction=right
+    multiattack, direction=left
 *, 0.301, 0.259
-    multiattack, direction=right
+    multiattack, direction=left
 *, 0.111, 0.259
-    multiattack, direction=left
+    multiattack, direction=right
 *, 0.121, 0.184, adjust=True
-    multiattack, direction=left
-*, 0.425, 0.103, adjust=True
-    multiattack, direction=left
-*, 0.678, 0.052, adjust=True
-    multiattack, direction=left
-*, 0.850, 0.050
-    multiattack, direction=left
+    multiattack, direction=right
+*, 0.264, 0.103, adjust=True
+    multiattack, direction=right
+*, 0.500, 0.103, adjust=True
+    multiattack, direction=right
+*, 0.770, 0.052
+    multiattack, direction=right
 
 
 

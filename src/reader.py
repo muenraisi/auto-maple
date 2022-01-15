@@ -127,7 +127,7 @@ class Reader:
                 #########################################
                 #       Display useful information      #
                 #########################################
-                minimap = Reader._rescale_frame(minimap, 2.5)
+                minimap = Reader._rescale_frame(minimap, 2)
 
                 # Mark the position of the active rune
                 if config.rune_active:
