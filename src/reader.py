@@ -1,14 +1,12 @@
 """A module for tracking useful in-game information."""
 
-import config
-import mss
+from src import config, utils
 import cv2
 import threading
 import numpy as np
-import utils
 import time
-from bot import Point
-from vkeys import click
+from src.bot import Point
+from src.vkeys import click
 
 
 class Reader:
@@ -95,6 +93,10 @@ class Reader:
 
                 # Check for a rune
                 if not config.rune_active:
+                    rune_cooldown = utils.multi_match(frame, config.RUNE_COOLDOWN_TEMPLATE, threshold=0.7)
+                    if rune_cooldown:
+                        continue
+
                     rune = utils.multi_match(minimap, config.RUNE_TEMPLATE, threshold=0.9)
                     if rune and config.sequence:
                         abs_rune_pos = (rune[0][0] - 1, rune[0][1])
@@ -108,14 +110,14 @@ class Reader:
                 now = time.time()
                 if now - config.last_checking_click > 10:
                     # bonus box
-                    bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.8)
+                    bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.7)
                     if bonus:
                         print("detect bonus box")
                         for _ in range(3):
                             click((bonus[0][0] + config.MONITOR["left"],
-                                   bonus[0][1] + config.MONITOR["top"]))
+                                   bonus[0][1] + config.MONITOR["top"] + 13))
                     # dialogue box
-                    dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.8)
+                    dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.7)
                     if dialogue:
                         for _ in range(3):
                             click((dialogue[0][0] + config.MONITOR["left"],

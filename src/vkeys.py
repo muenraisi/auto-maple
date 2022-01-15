@@ -2,7 +2,7 @@
 
 import ctypes
 import time
-import utils
+from src import utils
 import win32con
 import win32api
 from ctypes import wintypes

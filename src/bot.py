@@ -1,22 +1,18 @@
 """An interpreter that reads and executes user-created routines."""
 
-import config
-import detection
+from src import config, utils, detection
 import threading
 import winsound
 import time
 import csv
-import mss
-import utils
 import pygame
 import inspect
 import commands
 import keyboard as kb
-import numpy as np
 import cv2
 from os import listdir, makedirs
 from os.path import isfile, join, splitext
-from vkeys import press, click, key_down, key_up
+from src.vkeys import press, click
 from layout import Layout
 
 # A dictionary that maps each setting to its validator function
@@ -129,6 +125,7 @@ class Bot:
             if config.alert_active:
                 Bot._alert()
             if config.enabled:
+                Bot._execute_candidate()
                 buff.main()  # TODO: buff function should be improved to ensure buff in time
                 element = config.sequence[config.seq_index]
                 if isinstance(element, Point):
@@ -405,3 +402,11 @@ class Bot:
         else:
             config.pick_active = False
             winsound.Beep(523, 333)  # C5
+
+    @staticmethod
+    @utils.run_if_enabled
+    def _execute_candidate():
+        config.player_command_lock = True
+        for command in config.player_commands:
+            press(*command[0], **command[1])
+        config.player_command_lock = False

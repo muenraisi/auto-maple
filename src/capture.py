@@ -2,9 +2,9 @@ import threading
 import numpy as np
 from collections import deque
 import mss
+import time
 
-import config
-import utils
+from src import config, utils
 
 
 class Capture:
@@ -40,5 +40,7 @@ class Capture:
                                                 config.HEADER_TEMPLATE)
                     config.MONITOR = {'top': br[1], 'left': tl[0], 'width': 1366, 'height': 768}
                     config.cropped = True
+                    tmp_time = time.time()
                 else:
                     config.frames.append(frame)
+

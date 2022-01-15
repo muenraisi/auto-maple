@@ -1,12 +1,11 @@
 """A keyboard listener to track user inputs."""
 
-import config
+from src import config, utils
 import time
-import utils
 import threading
 import keyboard as kb
 import os
-from bot import Bot
+from src.bot import Bot
 
 
 class Listener:
@@ -49,7 +48,7 @@ class Listener:
                     print(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})')
                     with open('temp.txt', 'a') as f:
                         f.write(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})\n')
-                    print("hp: ",config.player_status["hp"], " and mp: ", config.player_status["mp"])
+                    print("hp: ", config.player_status["hp"], " and mp: ", config.player_status["mp"])
                     time.sleep(0.5)
                 elif kb.is_pressed('Esc'):
                     print("Closed by keyboard.")

@@ -1,9 +1,8 @@
 """A collection of Commands shared across all command books."""
 
-import config
-import utils
+from src import config, utils
 import time
-from vkeys import key_down, key_up, press
+from src.vkeys import key_down, key_up, press
 
 
 #############################
@@ -88,7 +87,7 @@ class Fall(Command):
     from their starting position.
     """
 
-    def __init__(self, distance=config.move_tolerance/2):
+    def __init__(self, distance=config.move_tolerance / 2):
         self.name = 'Fall'
         self.distance = float(distance)
 

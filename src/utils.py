@@ -1,8 +1,9 @@
 """A collection of functions and classes used across multiple modules."""
 
-import config
+from src import config
 import math
 import cv2
+import time
 import numpy as np
 from random import random
 
@@ -17,6 +18,7 @@ def run_if_enabled(function):
     def helper(*args, **kwargs):
         if config.enabled:
             return function(*args, **kwargs)
+
     return helper
 
 
@@ -58,7 +60,7 @@ def separate_args(arguments):
         index = a.find('=')
         if index > -1:
             key = a[:index].strip()
-            value = a[index+1:].strip()
+            value = a[index + 1:].strip()
             kwargs[key] = value
         else:
             args.append(a)
@@ -236,3 +238,14 @@ def validate_boolean(boolean):
         elif boolean == 'false':
             return False
     raise ValueError
+
+
+def insert_player_command(key, n, down_time=0.05, up_time=0.1):
+    cmd = ([key, n], {"down_time": down_time, "up_time": up_time})
+    if cmd not in config.player_commands:
+        while True:
+            if config.player_command_lock:
+                time.sleep(0.1)
+            else:
+                config.player_commands.append(([key, n], {"down_time": down_time, "up_time": up_time}))
+                break

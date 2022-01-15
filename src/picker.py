@@ -1,9 +1,7 @@
-import config
+from src import config, utils
 import time
 import threading
-from vkeys import press
-import utils
-from random import random
+from src.vkeys import press
 
 
 class Picker:

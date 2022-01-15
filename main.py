@@ -1,13 +1,14 @@
 """The center of Auto Kanna that ties all the modules together."""
 
-import config
+from src import config
 import time
-from capture import Capture
-from reader import Reader
-from listener import Listener
-from bot import Bot
-from picker import Picker
-from pet import Pet
+from src.capture import Capture
+from src.reader import Reader
+from src.presser import Presser
+from src.listener import Listener
+from src.bot import Bot
+from src.picker import Picker
+from src.pet import Pet
 
 capture = Capture()
 capture.start()

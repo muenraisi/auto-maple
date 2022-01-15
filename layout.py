@@ -1,7 +1,6 @@
 """A module for saving map layouts and determining shortest paths."""
 
-import config
-import utils
+from src import config, utils
 import cv2
 import math
 import pickle

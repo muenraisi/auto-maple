@@ -46,6 +46,8 @@ DIALOGUE_TEMPLATE = cv2.imread("assets/dialogue_template.jpg", 0)
 # A rune's symbol on the minimap
 RUNE_TEMPLATE = cv2.imread('assets/rune_template.png', 0)
 
+
+RUNE_COOLDOWN_TEMPLATE= cv2.imread('assets/rune_cooldown_template.jpg', 0)
 # The icon of the buff given by the rune
 RUNE_BUFF_TEMPLATE = cv2.imread('assets/rune_buff_template.jpg', 0)
 
@@ -58,6 +60,12 @@ MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg', 0)
 #################################
 #       Global Variables        #
 #################################
+#
+# the player's command
+player_commands = []
+
+player_command_lock = False
+
 #
 player_status = {"hp": 100, "mp": 100}
 

@@ -1,9 +1,9 @@
 """A module for classifying directional arrows using TensorFlow."""
 
-import utils
 import cv2
 import tensorflow as tf
 import numpy as np
+from src import utils
 
 
 #########################
@@ -60,13 +60,13 @@ def run_inference_for_single_image(model, image):
     image = np.asarray(image)
 
     input_tensor = tf.convert_to_tensor(image)
-    input_tensor = input_tensor[tf.newaxis,...]
+    input_tensor = input_tensor[tf.newaxis, ...]
 
     model_fn = model.signatures['serving_default']
     output_dict = model_fn(input_tensor)
 
     num_detections = int(output_dict.pop('num_detections'))
-    output_dict = {key: value[0,:num_detections].numpy() 
+    output_dict = {key: value[0, :num_detections].numpy()
                    for key, value in output_dict.items()}
     output_dict['num_detections'] = num_detections
     output_dict['detection_classes'] = output_dict['detection_classes'].astype(np.int64)
@@ -122,19 +122,19 @@ def merge_detection(model, image):
     """
 
     label_map = {1: 'up', 2: 'down', 3: 'left', 4: 'right'}
-    converter = {'up': 'right', 'down': 'left'}         # For the 'rotated inferences'
+    converter = {'up': 'right', 'down': 'left'}  # For the 'rotated inferences'
     classes = []
-    
+
     # Preprocessing
     height, width, channels = image.shape
-    cropped = image[120:height//2, width//4:3*width//4]
+    cropped = image[120:height // 2, width // 4:3 * width // 4]
     filtered = filter_color(cropped)
     cannied = canny(filtered)
 
     # Isolate the rune box
     height, width, channels = cannied.shape
     boxes = get_boxes(model, cannied)
-    if len(boxes) == 4:      # Only run further inferences if arrows have been correctly detected
+    if len(boxes) == 4:  # Only run further inferences if arrows have been correctly detected
         y_mins = [b[0][0] for b in boxes]
         x_mins = [b[0][1] for b in boxes]
         y_maxes = [b[0][2] for b in boxes]
@@ -153,7 +153,7 @@ def merge_detection(model, image):
         y_offset = (pad_height - height) // 2
 
         if x_offset > 0 and y_offset > 0:
-            preprocessed[y_offset:y_offset+height, x_offset:x_offset+width] = rune_box
+            preprocessed[y_offset:y_offset + height, x_offset:x_offset + width] = rune_box
 
         # Run detection on preprocessed image
         lst = sort_by_confidence(model, preprocessed)
@@ -167,7 +167,7 @@ def merge_detection(model, image):
         rotated_classes = [converter[label_map[item[2]]]
                            for item in lst
                            if item[2] in [1, 2]]
-            
+
         # Merge the two detection results
         for i in range(len(classes)):
             if rotated_classes and classes[i] in ['left', 'right']:
@@ -178,8 +178,9 @@ def merge_detection(model, image):
 
 # Script for testing the detection module by itself
 if __name__ == '__main__':
-    import config
+    from src import config
     import mss
+
     config.enabled = True
     monitor = {'top': 0, 'left': 0, 'width': 1366, 'height': 768}
     model = load_model()
@@ -189,5 +190,5 @@ if __name__ == '__main__':
             cv2.imshow('frame', canny(filter_color(frame)))
             arrows = merge_detection(model, frame)
             print(arrows)
-            if cv2.waitKey(1) & 0xFF == 27:     # 27 is ASCII for the Esc key
+            if cv2.waitKey(1) & 0xFF == 27:  # 27 is ASCII for the Esc key
                 break

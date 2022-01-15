@@ -1,0 +1,13 @@
+s, adjust_tolerance, 0.0125
+s, move_tolerance , 0.12
+
+*, 0.323, 0.552
+    multiattack, direction=right
+*, 0.657, 0.576
+    multiattack, direction=left
+*, 0.657, 0.303
+    multiattack, direction=left
+*, 0.329, 0.303
+    multiattack, direction=right
+
+

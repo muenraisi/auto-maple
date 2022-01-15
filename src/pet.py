@@ -1,10 +1,8 @@
-import config
+from src import config, utils
 import time
 import threading
-from vkeys import press
-import utils
+from src.presser import Presser
 import numpy as np
-import cv2
 
 
 def bar_to_per(img):
@@ -12,7 +10,7 @@ def bar_to_per(img):
     dis = np.sum((img_mean - np.array([119, 113, 115])) ** 2, axis=1)
     # print(dis)
     for i in range(len(dis)):
-        if dis[i] < 1000:
+        if dis[i] < 200:
             break
     return i / len(dis)
 
@@ -41,12 +39,10 @@ class Pet:
         """
 
         while True:
-            Pet._get_status()
-            Pet._recovery()
-            time.sleep(1)
+            Pet._check_status()
 
     @staticmethod
-    def _get_status():
+    def _check_status():
         frame = config.frames[-1]
         hp_img = frame[716:728, 611:781, :]
         config.player_status["hp"] = bar_to_per(hp_img)
@@ -57,14 +53,9 @@ class Pet:
         # cv2.imwrite("mp.jpg", mp_img)
         # time.sleep(10000)
 
-    @staticmethod
-    @utils.run_if_enabled
-    def _recovery():
-
-        if config.player_status["hp"] < 0.5:
-            print("hp is ", config.player_status["hp"], "add hp")
-            press("home", 1)
+        if config.player_status["hp"] < 0.4:
+            print("hp is ", config.player_status["hp"], "prepare to add hp")
+            utils.insert_player_command("home", 1)
         if config.player_status["mp"] < 0.2:
-            print("mp is ", config.player_status["mp"], "add mp")
-            press("2", 1)
-        time.sleep(5)
+            print("mp is ", config.player_status["mp"], "prepare to add mp")
+            utils.insert_player_command("2", 1)
