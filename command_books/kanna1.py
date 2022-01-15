@@ -113,7 +113,7 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['-', '0', '5']
+        buffs = ['-', '0', '=','5']
         now = time.time()
         if self.haku_time == 0 or now - self.haku_time > 46:
             # press('d', 2, up_time=0.3)
