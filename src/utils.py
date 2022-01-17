@@ -249,3 +249,7 @@ def insert_player_command(key, n, down_time=0.05, up_time=0.1):
             else:
                 config.player_commands.append(([key, n], {"down_time": down_time, "up_time": up_time}))
                 break
+
+
+def image_same(image1, image2):
+    return image1.shape == image2.shape and not(np.bitwise_xor(image1,image2).any())

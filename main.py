@@ -25,11 +25,11 @@ config.ready = False
 listener = Listener()
 listener.start()
 
-pet = Pet()
-pet.start()
-
 bot = Bot()
 bot.start()
+
+pet = Pet()
+pet.start()
 
 picker = Picker()
 picker.start()

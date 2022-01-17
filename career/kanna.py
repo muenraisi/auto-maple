@@ -3,9 +3,8 @@
 from src import config, utils
 import time
 import math
-from commands import Command
+from src.commands import Command
 from src.vkeys import press, key_down, key_up
-
 
 class Move(Command):
     """Moves to a given position using the shortest path based on the current Layout."""
@@ -113,12 +112,12 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['-', '0', '=','5']
+        buffs = ['-', '0', 'f8', 'f7', 'f6', 'f5', 'f4','5']
         now = time.time()
         if self.haku_time == 0 or now - self.haku_time > 46:
-            # press('d', 2, up_time=0.3)
+            press('d', 2, up_time=0.3)
             press('w', 2, up_time=0.3)
-            # press('z', 2, up_time=0.3)
+            press('z', 2, up_time=0.3)
             press('q', 1)
             self.haku_time = now
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:
@@ -171,7 +170,7 @@ class MultiAttack(Command):
         time.sleep(0.05)
         press('a', 1, up_time=0.05)
         key_down(self.direction)
-        press('lshift', 2, up_time=0.05)
+        press('lshift', 3, up_time=0.05)
         key_up(self.direction)
         press('a', 1, up_time=0.05)
         time.sleep(0.3)

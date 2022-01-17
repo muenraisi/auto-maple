@@ -1,9 +1,9 @@
-"""A collection of all commands that a Breaker[奇袭者] can use to interact with the game."""
+"""A collection of all commands that a Blaster can use to interact with the game."""
 
 from src import config, utils
 import time
 import math
-from commands import Command
+from src.commands import Command
 from src.vkeys import press, key_down, key_up
 
 
@@ -36,18 +36,17 @@ class Move(Command):
                 d_x = target[0] - config.player_pos[0]
                 if abs(d_x) > config.move_tolerance / math.sqrt(2):
                     if d_x < 0:
-                        Teleport('left').main()
+                        Jump('left').main()
                     else:
-                        Teleport('right').main()
+                        Jump('right').main()
                     counter -= 1
             else:
                 d_y = target[1] - config.player_pos[1]
                 if abs(d_y) > config.move_tolerance / math.sqrt(2):
-                    jump = str(abs(d_y) > config.move_tolerance * 1.5)
                     if d_y < 0:
-                        Teleport('up', jump=jump).main()
+                        Jump('up').main()
                     else:
-                        Teleport('down', jump=jump).main()
+                        Jump('down').main()
                     counter -= 1
             local_error = utils.distance(config.player_pos, target)
             global_error = utils.distance(config.player_pos, self.target)
@@ -92,11 +91,11 @@ class Adjust(Command):
                 d_y = self.target[1] - config.player_pos[1]
                 if abs(d_y) > config.adjust_tolerance / math.sqrt(2):
                     if d_y < 0:
-                        Teleport('up').main()
+                        Jump('up').main()
                     else:
                         key_down('down')
                         time.sleep(0.05)
-                        press(config.KEYBOARD_JUMP, 3, down_time=0.1)
+                        press('space', 3, down_time=0.1)
                         key_up('down')
                         time.sleep(0.05)
                     counter -= 1
@@ -105,58 +104,64 @@ class Adjust(Command):
 
 
 class Buff(Command):
-    """Uses each of Kanna's buffs once. Uses 'Haku Reborn' whenever it is available."""
+    """Uses each of Blaster's buffs once."""
 
     def __init__(self):
         self.name = 'Buff'
-        self.buff_time = 0
+        self.booster_time = 0
+        self.warrior_time = 0
 
     def main(self):
-        buffs = ['f8', 'f7']
         now = time.time()
-        if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:
-            for key in buffs:
-                press(key, 2, up_time=0.3)
-            self.buff_time = now
+        if self.booster_time == 0 or now - self.booster_time > 190:
+            press('f1', 2)
+            self.booster_time = now
+        if self.warrior_time == 0 or now - self.warrior_time > 890:
+            press('f2', 2)
+            self.warrior_time = now
 
 
-class Teleport(Command):
-    """
-    Teleports in a given direction, jumping if specified. Adds the player's position
-    to the current Layout if necessary.
-    """
+class Jump(Command):
+    """Performs a flash jump or 'Detonate' in the given direction."""
 
-    def __init__(self, direction, jump='False'):
-        self.name = 'Teleport'
+    def __init__(self, direction):
+        self.name = 'Jump'
         self.direction = utils.validate_arrows(direction)
-        self.jump = utils.validate_boolean(jump)
 
     def main(self):
         key_down(self.direction)
-        if self.direction in ["left", "right"]:
-            press("a",1)
+        time.sleep(0.1)
+        press('space', 1)
+        if self.direction == 'up':
+            press('d', 1)
         else:
-            press("alt", 1)
+            press('space', 1)
         key_up(self.direction)
-        if config.record_layout:
-            config.layout.add(*config.player_pos)
+        time.sleep(0.5)
 
 
-class MultiAttack(Command):
-    def __init__(self, direction, attacks=2, repetitions=1):
-        self.name = 'multiattack'
-        self.direction = utils.validate_horizontal_arrows(direction)
-        self.attacks = int(attacks)
-        self.repetitions = int(repetitions)
+class MagnumPunch(Command):
+    """Performs a 'No-Reload Magnum Punch' combo once."""
+
+    def __init__(self, direction):
+        self.name = 'Magnum Punch'
+        self.direction = utils.validate_arrows(direction)
 
     def main(self):
-        time.sleep(0.05)
         key_down(self.direction)
         time.sleep(0.05)
-        for _ in range(self.repetitions):
-            press('lshift', self.attacks, up_time=0.2)
+        key_down('q')
+        time.sleep(0.1)
+        for _ in range(3):
+            key_down('r')
+            time.sleep(0.05)
+            key_down('e')
+            time.sleep(0.05)
+            key_up('r')
+            key_up('e')
+            time.sleep(0.05)
+        key_up('q')
+        time.sleep(0.025)
+        press('space', 1)
         key_up(self.direction)
-        if self.attacks > 2:
-            time.sleep(0.3)
-        else:
-            time.sleep(0.2)
+        time.sleep(0.05)

@@ -40,7 +40,6 @@ class Listener:
                     Bot.load_routine(config.routine)
                 elif kb.is_pressed('F11'):
                     config.calibrated = False
-                    Bot.load_commands()
                     Bot.load_routine()
                 elif kb.is_pressed('F12'):
                     displayed_pos = tuple('{:.3f}'.format(round(i, 3)) for i in config.player_pos)

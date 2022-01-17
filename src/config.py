@@ -61,6 +61,9 @@ MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg', 0)
 #       Global Variables        #
 #################################
 #
+# the player's career
+player_career = None
+
 # the player's command
 player_commands = []
 

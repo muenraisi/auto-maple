@@ -1,13 +1,12 @@
 """An interpreter that reads and executes user-created routines."""
 
-from src import config, utils, detection
+from src import config, utils, detection, commands
 import threading
 import winsound
 import time
 import csv
 import pygame
 import inspect
-import commands
 import keyboard as kb
 import cv2
 from os import listdir, makedirs
@@ -222,14 +221,15 @@ class Bot:
         """
 
         utils.print_separator()
-        print('~~~ Import Command Book ~~~')
-        module_file = Bot._select_file('./command_books', '.py')
+        print('~~~ Import career book ~~~')
+        module_file = Bot._select_file('./career', '.py')
         module_name = splitext(module_file)[0]
+        config.player_career = module_name
 
         # Generate a command book using the selected module
         utils.print_separator()
-        print(f"Loading command book '{module_name}'...")
-        module = __import__(f'command_books.{module_name}', fromlist=[''])
+        print(f"Loading career book '{module_name}'...")
+        module = __import__(f'career.{module_name}', fromlist=[''])
         config.command_book = {}
         for name, command in inspect.getmembers(module, inspect.isclass):
             name = name.lower()
@@ -248,12 +248,12 @@ class Bot:
                 success = False
                 print(f"Error: Must implement '{command}' command.")
         if success:
-            print(f"Successfully loaded command book '{module_name}'.")
+            print(f"Successfully loaded career book '{module_name}'.")
         else:
             config.command_book = {'move': commands.DefaultMove,
                                    'adjust': commands.DefaultAdjust,
                                    'buff': commands.DefaultBuff}
-            print(f"Command book '{module_name}' was not loaded.")
+            print(f"Career book '{module_name}' was not loaded.")
 
     @staticmethod
     def load_routine(file=None):
@@ -292,10 +292,10 @@ class Bot:
                     line += 1
             config.routine = file
             config.layout = Layout.load(file)
-            print(f"Finished loading routine '{file}'.")
             winsound.Beep(523, 200)  # C5
             winsound.Beep(659, 200)  # E5
             winsound.Beep(784, 200)  # G5
+            print(f"Finished loading routine '{file}'.")
 
     @staticmethod
     def _eval(expr, n):
