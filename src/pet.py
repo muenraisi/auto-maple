@@ -6,6 +6,41 @@ import cv2
 from os import listdir
 from os.path import isfile, join
 
+SHORTCUT_MAP = {
+    "q": (0, 0),
+    "w": (0, 1),
+    "e": (0, 2),
+    "r": (0, 3),
+    "t": (0, 4),
+    "f1": (0, 5),
+    "f2": (0, 6),
+    "f3": (0, 7),
+    "f4": (0, 8),
+    "1": (0, 9),
+    "2": (0, 10),
+    "3": (0, 11),
+    "4": (0, 12),
+    "5": (0, 13),
+    "home": (0, 14),
+    "pageup": (0, 15),
+    "a": (1, 0),
+    "s": (1, 1),
+    "d": (1, 2),
+    "f": (1, 3),
+    "g": (1, 4),
+    "f5": (1, 5),
+    "f6": (1, 6),
+    "f7": (1, 7),
+    "f8": (1, 8),
+    "z": (1, 9),
+    "x": (1, 10),
+    "c": (1, 11),
+    "v": (1, 12),
+    "b": (1, 13),
+    "end": (1, 14),
+    "pagedown": (1, 15),
+}
+
 
 def bar_to_per(img):
     img_mean = np.mean(img[:, :, 0:3], axis=0).reshape(10, 17, 3).mean(axis=1)
@@ -21,6 +56,7 @@ class Pet:
     def __init__(self):
         """Initializes this Pet object's main thread."""
         self.feed_time = time.time()
+        self.shortcuts = {}
         self.thread = threading.Thread(target=self.main())
         self.thread.daemon = True
 
@@ -30,7 +66,7 @@ class Pet:
         :return:    None
         """
 
-        print('\nStarted Pet.')
+        print('\nStarted Pet main.')
         self.thread.start()
 
     def main(self):
@@ -39,17 +75,19 @@ class Pet:
         :return:    None
         """
 
-        while True:
-            if config.player_career:
-                break
-            else:
-                time.sleep(1)
-        # dir = "./career/"+ config.player_career + "/cooldown"
-        # cooldown_files = [f for f in listdir(dir) if isfile(join(dir, f)) and "jpg" in f]
+        dir = "./career/" + config.player_career
+        jpg_files = [f for f in listdir(dir) if isfile(join(dir, f)) and "jpg" in f]
+        shortcut_files = [item for item in jpg_files if item.startswith("shortcut_")]
+        for file in shortcut_files:
+            _ = file.find(".")
+            key = file[9:_]
+            self.shortcuts[key] = cv2.imread(dir + "/" + file, 0)
 
+        print('\nStarted Pet loop.')
         while True:
             Pet._check_status()
             self.feed()
+            self.cooldown()
 
     @staticmethod
     @utils.run_if_enabled
@@ -67,14 +105,14 @@ class Pet:
         if config.player_status["hp"] < 0.4:
             print("hp is ", config.player_status["hp"], "prepare to add hp")
             utils.insert_player_command("home", 1)
-            now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
-            cv2.imwrite('./assets/debug/hp/{}.jpg'.format(now_time), frame)
+            now_time = time.strftime('%Y%m%d%H%M', time.localtime())
+            cv2.imwrite('./logs/debug/hp/{}.jpg'.format(now_time), frame)
 
         if config.player_status["mp"] < 0.2:
             print("mp is ", config.player_status["mp"], "prepare to add mp")
             utils.insert_player_command("2", 1)
-            now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
-            cv2.imwrite('./assets/debug/mp/{}.jpg'.format(now_time), frame)
+            now_time = time.strftime('%Y%m%d%H%M', time.localtime())
+            cv2.imwrite('./logs/debug/mp/{}.jpg'.format(now_time), frame)
 
     @utils.run_if_enabled
     def feed(self):
@@ -84,8 +122,22 @@ class Pet:
 
     @utils.run_if_enabled
     def cooldown(self):
+        frame = config.frames[-1]
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        shortcut_area = gray[687:687 + 69, 805:805 + 559]
+        now_time = time.strftime('%Y%m%d%H%M', time.localtime())
+        cv2.imwrite('./logs/debug/shortcuts/area_{}.jpg'.format(now_time), shortcut_area)
+        for key, value in config.player_skills.items():
+            if value["cooldown"]:
+                h, w = SHORTCUT_MAP[key]
+                cv2.imwrite('./logs/debug/shortcuts/{}_{}.jpg'.format(key, now_time),
+                            shortcut_area[35 * h +3:35 * h + 31, 35 * w +3:35 * w + 31])
+                if utils.image_same(shortcut_area[35 * h+3:35 * h + 31, 35 * w+3:35 * w + 31], self.shortcuts[key]):
+                    utils.insert_player_command(key, 1, down_time=value["down_time"], up_time=value["up_time"])
+
         pass
     # @staticmethod
-    # @utils.run_if_enabled
+    # @utils.
     # def _periodic_skill():
     #     for
+

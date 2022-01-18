@@ -64,6 +64,8 @@ MUSHROOM_TEMPLATE = cv2.imread('assets/mushroom_template.jpg', 0)
 # the player's career
 player_career = None
 
+player_skills = {}
+
 # the player's command
 player_commands = []
 

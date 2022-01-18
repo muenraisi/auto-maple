@@ -108,17 +108,22 @@ class Reader:
 
                 # TODO: to avoid action in capture
                 now = time.time()
-                if now - config.last_checking_click > 10:
+                if now - config.last_checking_click > 1:
                     # bonus box
                     bonus = utils.multi_match(frame, config.BONUS_TEMPLATE, threshold=0.7)
                     if bonus:
                         print("detect bonus box")
+                        now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
+                        cv2.imwrite('./logs/debug/bonus/{}.jpg'.format(now_time), frame)
                         for _ in range(3):
                             click((bonus[0][0] + config.MONITOR["left"],
                                    bonus[0][1] + config.MONITOR["top"] + 13))
                     # dialogue box
                     dialogue = utils.multi_match(frame, config.DIALOGUE_TEMPLATE, threshold=0.7)
                     if dialogue:
+                        print("detect dialogue box")
+                        now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
+                        cv2.imwrite('./logs/debug/dialogue/{}.jpg'.format(now_time), frame)
                         for _ in range(3):
                             click((dialogue[0][0] + config.MONITOR["left"],
                                    dialogue[0][1] + config.MONITOR["top"]))

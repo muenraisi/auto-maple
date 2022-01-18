@@ -37,6 +37,7 @@ class Listener:
                     Bot.toggle_enabled()
                     time.sleep(0.667)
                 elif kb.is_pressed('F10'):
+                    config.calibrated = False
                     Bot.load_routine(config.routine)
                 elif kb.is_pressed('F11'):
                     config.calibrated = False

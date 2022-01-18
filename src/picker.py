@@ -35,7 +35,6 @@ class Picker:
 
     @staticmethod
     def _pickup():
-        print("pick once")
         press("ctrl", 1, down_time=0.025, up_time=0.05)
         press("ctrl", 1, down_time=0.02, up_time=0.045)
         press("ctrl", 1, down_time=0.03, up_time=0.055)

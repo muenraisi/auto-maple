@@ -193,11 +193,11 @@ class Bot:
         config.listening = False
         Bot.alert.play(-1)
         now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
-        makedirs('./assets/alerts/{}'.format(now_time), exist_ok=False)
+        makedirs('./logs/alerts/{}'.format(now_time), exist_ok=False)
         count = 0
         while not kb.is_pressed('insert'):
             count += 1
-            cv2.imwrite('./assets/alerts/{}/{}.jpg'.format(now_time, str(count).zfill(4)), config.frames[-1])
+            cv2.imwrite('./logs/alerts/{}/{}.jpg'.format(now_time, str(count).zfill(4)), config.frames[-1])
         Bot.alert.stop()
         config.alert_active = False
         time.sleep(1)
@@ -223,13 +223,14 @@ class Bot:
         utils.print_separator()
         print('~~~ Import career book ~~~')
         module_file = Bot._select_file('./career', '.py')
-        module_name = splitext(module_file)[0]
-        config.player_career = module_name
+        config.player_career = splitext(module_file)[0]
 
         # Generate a command book using the selected module
         utils.print_separator()
-        print(f"Loading career book '{module_name}'...")
-        module = __import__(f'career.{module_name}', fromlist=[''])
+        print(f"Loading career book '{config.player_career}'...")
+        module = __import__(f'career.{config.player_career}', fromlist=[''])
+        if "SKILLS" in [item for item in dir(module) if not item.startswith("__")]:
+            config.player_skills = module.SKILLS
         config.command_book = {}
         for name, command in inspect.getmembers(module, inspect.isclass):
             name = name.lower()
@@ -248,12 +249,12 @@ class Bot:
                 success = False
                 print(f"Error: Must implement '{command}' command.")
         if success:
-            print(f"Successfully loaded career book '{module_name}'.")
+            print(f"Successfully loaded career book '{config.player_career}'.")
         else:
             config.command_book = {'move': commands.DefaultMove,
                                    'adjust': commands.DefaultAdjust,
                                    'buff': commands.DefaultBuff}
-            print(f"Career book '{module_name}' was not loaded.")
+            print(f"Career book '{config.player_career}' was not loaded.")
 
     @staticmethod
     def load_routine(file=None):

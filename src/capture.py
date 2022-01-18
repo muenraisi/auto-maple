@@ -37,9 +37,10 @@ class Capture:
                 now_time = time.time()
                 if now_time - tmp_time > 300:
                     header_monitor = {'top': br[1] - 31, 'left': config.MONITOR["left"], 'width': 1366, 'height': 31}
-                    header_frame = np.array(sct.grab(config.MONITOR))
-                    if not utils.image_same(header_frame, config.HEADER_TEMPLATE):
-                        cv2.imwrite('./assets/debug/header/{}.jpg'.format(now_time), frame)
+                    header_frame = np.array(sct.grab(header_monitor))
+                    header_gray = cv2.cvtColor(header_frame, cv2.COLOR_BGR2GRAY)
+                    if not utils.image_same(header_gray, config.HEADER_TEMPLATE):
+                        cv2.imwrite('./logs/debug/header/{}.jpg'.format(now_time), header_frame)
                         print("WARN: the screen has been shifted, now cropped again")
                     config.cropped = False
                     config.MONITOR = {'top': 0, 'left': 0, 'width': 1400, 'height': 800}
