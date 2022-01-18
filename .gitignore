@@ -10,3 +10,4 @@ venv/
 /assets/models/
 /assets/alerts/
 /assets/debug/
+/logs/

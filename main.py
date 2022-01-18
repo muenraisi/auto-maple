@@ -25,17 +25,24 @@ config.ready = False
 listener = Listener()
 listener.start()
 
+picker = Picker()
+picker.start()
+
 bot = Bot()
 bot.start()
+
+# while True:
+#     if config.player_career:
+#         break
+#     else:
+#         time.sleep(0.1)
+
+while not config.listening:
+    time.sleep(0.01)
 
 pet = Pet()
 pet.start()
 
-picker = Picker()
-picker.start()
-
-while not config.ready:
-    time.sleep(0.01)
 
 print('\nSuccessfully initialized Auto Maple, now accepting commands.')
 
