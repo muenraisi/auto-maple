@@ -124,7 +124,8 @@ class Bot:
             if config.alert_active:
                 Bot._alert()
             if config.enabled:
-                Bot._execute_candidate()
+                if config.player_commands:
+                    Bot._execute_candidate()
                 buff.main()  # TODO: buff function should be improved to ensure buff in time
                 element = config.sequence[config.seq_index]
                 if isinstance(element, Point):
@@ -409,5 +410,8 @@ class Bot:
     def _execute_candidate():
         config.player_command_lock = True
         for command in config.player_commands:
+            if config.DEBUG:
+                print("press", command)
             press(*command[0], **command[1])
+        config.player_commands = []
         config.player_command_lock = False

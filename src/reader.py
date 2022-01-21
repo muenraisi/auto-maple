@@ -38,6 +38,7 @@ class Reader:
         :return:    None
         """
 
+        config.last_checking_click = time.time()
         while True:
             if not config.cropped or len(config.frames) == 0:
                 time.sleep(0.01)

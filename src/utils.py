@@ -22,6 +22,20 @@ def run_if_enabled(function):
     return helper
 
 
+def debug_info(function):
+    """
+    Decorator for functions that should only run if the bot is enabled.
+    :param function:    The function to decorate.
+    :return:            The decorated function.
+    """
+
+    def helper(*args, **kwargs):
+        if config.DEBUG:
+            return function(*args, **kwargs)
+
+    return helper
+
+
 def reset_settings():
     """
     Resets all settings to their default values.
@@ -248,6 +262,8 @@ def insert_player_command(key, n=1, down_time=0.05, up_time=0.1):
                 time.sleep(0.1)
             else:
                 config.player_commands.append(cmd)
+                if config.DEBUG:
+                    print("insert_player_command: ", key, n, down_time, up_time)
                 break
 
 

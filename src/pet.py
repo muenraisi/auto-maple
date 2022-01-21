@@ -74,8 +74,8 @@ class Pet:
         Constantly simulates the action of a pet.
         :return:    None
         """
-
-        dir = "./career/" + config.player_career
+        career = ''.join([i for i in config.player_career if not i.isdigit()])
+        dir = "./career/" + config.computer_name + "/" +career
         jpg_files = [f for f in listdir(dir) if isfile(join(dir, f)) and "jpg" in f]
         shortcut_files = [item for item in jpg_files if item.startswith("shortcut_")]
         for file in shortcut_files:
@@ -106,13 +106,13 @@ class Pet:
             print("hp is ", config.player_status["hp"], "prepare to add hp")
             utils.insert_player_command("home", 1)
             now_time = time.strftime('%Y%m%d%H%M', time.localtime())
-            cv2.imwrite('./logs/debug/hp/{}.jpg'.format(now_time), frame)
+            cv2.imwrite('./logs/debug/hp/{}_{}.jpg'.format(now_time, config.player_status["hp"]), frame)
 
         if config.player_status["mp"] < 0.2:
             print("mp is ", config.player_status["mp"], "prepare to add mp")
             utils.insert_player_command("2", 1)
             now_time = time.strftime('%Y%m%d%H%M', time.localtime())
-            cv2.imwrite('./logs/debug/mp/{}.jpg'.format(now_time), frame)
+            cv2.imwrite('./logs/debug/mp/{}_{}.jpg'.format(now_time, config.player_status["mp"]), frame)
 
     @utils.run_if_enabled
     def feed(self):
@@ -130,14 +130,14 @@ class Pet:
         for key, value in config.player_skills.items():
             if value["cooldown"]:
                 h, w = SHORTCUT_MAP[key]
-                cv2.imwrite('./logs/debug/shortcuts/{}_{}.jpg'.format(key, now_time),
-                            shortcut_area[35 * h +3:35 * h + 31, 35 * w +3:35 * w + 31])
-                if utils.image_same(shortcut_area[35 * h+3:35 * h + 31, 35 * w+3:35 * w + 31], self.shortcuts[key]):
+                now_shortcut = shortcut_area[35 * h + 4:35 * h + 30, 35 * w + 4:35 * w + 30]
+                cv2.imwrite('./logs/debug/shortcuts/{}_{}.jpg'.format(key, now_time), now_shortcut)
+                if utils.image_same(now_shortcut, self.shortcuts[key]):
                     utils.insert_player_command(key, 1, down_time=value["down_time"], up_time=value["up_time"])
+                else:
+                    print("skill ", key, "at", now_time, "is still cooldown")
 
-        pass
     # @staticmethod
     # @utils.
     # def _periodic_skill():
     #     for
-

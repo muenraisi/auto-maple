@@ -6,6 +6,12 @@ import math
 from src.commands import Command
 from src.vkeys import press, key_down, key_up
 
+SKILLS = {
+    "w": {"down_time": 0.2, "up_time": 0.2, "cooldown": True},  # 召唤式神
+    "f1": {"down_time": 0.2, "up_time": 0.2, "cooldown": True},  # 公主庇佑
+    "s": {"down_time": 0.5, "up_time": 0.7, "cooldown": True},  # 阴阳制灵符
+}
+
 
 class Move(Command):
     """Moves to a given position using the shortest path based on the current Layout."""
@@ -113,12 +119,9 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['-', '0', '=','5']
+        buffs = ['-', '0', '=', '5']
         now = time.time()
         if self.haku_time == 0 or now - self.haku_time > 46:
-            # press('d', 2, up_time=0.3)
-            press('w', 2, up_time=0.3)
-            # press('z', 2, up_time=0.3)
             press('q', 1)
             self.haku_time = now
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:

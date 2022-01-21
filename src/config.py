@@ -1,6 +1,8 @@
 """A collection of variables shared across multiple modules."""
 
 import cv2
+import wmi
+
 # import ctypes
 # user32 = ctypes.windll.user32
 #
@@ -21,6 +23,7 @@ MINIMAP_TOP_BORDER = 4
 MINIMAP_BOTTOM_BORDER = 8
 
 
+DEBUG=True
 #################################
 #           TEMPLATES           #
 #################################
@@ -31,7 +34,7 @@ MINIMAP_TEMPLATE_BR = cv2.imread('assets/minimap_br.jpg', 0)
 MINIMAP_TEMPLATE_TL = cv2.imread('assets/minimap_tl.jpg', 0)
 
 #
-HEADER_TEMPLATE = cv2.imread('assets/header_template.png',0)
+HEADER_TEMPLATE = cv2.imread('assets/header_template.png', 0)
 
 # The player's symbol on the minimap
 PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)
@@ -42,12 +45,10 @@ BONUS_TEMPLATE = cv2.imread("assets/bonus_template.jpg", 0)
 # the dialogue box on the screen
 DIALOGUE_TEMPLATE = cv2.imread("assets/dialogue_template.jpg", 0)
 
-
 # A rune's symbol on the minimap
 RUNE_TEMPLATE = cv2.imread('assets/rune_template.png', 0)
 
-
-RUNE_COOLDOWN_TEMPLATE= cv2.imread('assets/rune_cooldown_template.jpg', 0)
+RUNE_COOLDOWN_TEMPLATE = cv2.imread('assets/rune_cooldown_template.jpg', 0)
 # The icon of the buff given by the rune
 RUNE_BUFF_TEMPLATE = cv2.imread('assets/rune_buff_template.jpg', 0)
 
@@ -87,7 +88,7 @@ ready = False
 calibrated = False
 
 #
-cropped =False
+cropped = False
 
 # Describes whether the keyboard listener is currently running
 listening = False
@@ -151,3 +152,11 @@ buff_cooldown = 180
 #################################
 
 KEYBOARD_JUMP = "alt"
+
+#################################
+#       Precompute Vars         #
+#################################
+
+
+computer_name = wmi.WMI().Win32_ComputerSystem()[0].name
+print(computer_name)
