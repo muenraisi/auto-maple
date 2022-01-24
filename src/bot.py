@@ -11,7 +11,7 @@ import keyboard as kb
 import cv2
 from os import listdir, makedirs
 from os.path import isfile, join, splitext
-from src.vkeys import press, click
+from src.vkeys import press, click, execute_skill
 from layout import Layout
 
 # A dictionary that maps each setting to its validator function
@@ -125,7 +125,7 @@ class Bot:
                 Bot._alert()
             if config.enabled:
                 if config.player_commands:
-                    Bot._execute_candidate()
+                    Bot._execute_skills()
                 buff.main()  # TODO: buff function should be improved to ensure buff in time
                 element = config.sequence[config.seq_index]
                 if isinstance(element, Point):
@@ -407,11 +407,11 @@ class Bot:
 
     @staticmethod
     @utils.run_if_enabled
-    def _execute_candidate():
+    def _execute_skills():
         config.player_command_lock = True
         for command in config.player_commands:
             if config.DEBUG:
                 print("press", command)
-            press(*command[0], **command[1])
+            execute_skill(*command[0], **command[1])
         config.player_commands = []
         config.player_command_lock = False

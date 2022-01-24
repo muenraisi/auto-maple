@@ -33,16 +33,16 @@ class Listener:
 
         while True:
             if config.listening:
-                if kb.is_pressed('f9'):
+                if kb.is_pressed('f1'):
                     Bot.toggle_enabled()
                     time.sleep(0.667)
-                elif kb.is_pressed('F10'):
+                elif kb.is_pressed('F2'):
                     config.calibrated = False
                     Bot.load_routine(config.routine)
-                elif kb.is_pressed('F11'):
+                elif kb.is_pressed('f3'):
                     config.calibrated = False
                     Bot.load_routine()
-                elif kb.is_pressed('F12'):
+                elif kb.is_pressed('F4'):
                     displayed_pos = tuple('{:.3f}'.format(round(i, 3)) for i in config.player_pos)
                     utils.print_separator()
                     print(f'Current position: ({displayed_pos[0]}, {displayed_pos[1]})')

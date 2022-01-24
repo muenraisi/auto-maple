@@ -75,7 +75,7 @@ class Pet:
         :return:    None
         """
         career = ''.join([i for i in config.player_career if not i.isdigit()])
-        dir = "./career/" + config.computer_name + "/" +career
+        dir = "./career/" +career
         jpg_files = [f for f in listdir(dir) if isfile(join(dir, f)) and "jpg" in f]
         shortcut_files = [item for item in jpg_files if item.startswith("shortcut_")]
         for file in shortcut_files:
@@ -85,9 +85,11 @@ class Pet:
 
         print('\nStarted Pet loop.')
         while True:
-            Pet._check_status()
-            self.feed()
-            self.cooldown()
+            if len(config.frames)!=0:
+                Pet._check_status()
+                self.feed()
+                self.cooldown()
+                time.sleep(1)
 
     @staticmethod
     @utils.run_if_enabled
@@ -104,27 +106,29 @@ class Pet:
 
         if config.player_status["hp"] < 0.4:
             print("hp is ", config.player_status["hp"], "prepare to add hp")
-            utils.insert_player_command("home", 1)
+            utils.insert_player_command("home", down_time=0.2)
             now_time = time.strftime('%Y%m%d%H%M', time.localtime())
             cv2.imwrite('./logs/debug/hp/{}_{}.jpg'.format(now_time, config.player_status["hp"]), frame)
 
         if config.player_status["mp"] < 0.2:
             print("mp is ", config.player_status["mp"], "prepare to add mp")
-            utils.insert_player_command("2", 1)
+            utils.insert_player_command("2", down_time=0.2)
             now_time = time.strftime('%Y%m%d%H%M', time.localtime())
             cv2.imwrite('./logs/debug/mp/{}_{}.jpg'.format(now_time, config.player_status["mp"]), frame)
 
     @utils.run_if_enabled
     def feed(self):
         if time.time() - self.feed_time > 900:
-            utils.insert_player_command("6", 1)
+            utils.insert_player_command("6", down_time=0.2)
             self.feed_time = time.time()
 
     @utils.run_if_enabled
     def cooldown(self):
+        if not config.frames:
+            return
         frame = config.frames[-1]
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        shortcut_area = gray[687:687 + 69, 805:805 + 559]
+        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        shortcut_area = frame[687:687 + 69, 805:805 + 559]
         now_time = time.strftime('%Y%m%d%H%M', time.localtime())
         cv2.imwrite('./logs/debug/shortcuts/area_{}.jpg'.format(now_time), shortcut_area)
         for key, value in config.player_skills.items():
@@ -132,10 +136,9 @@ class Pet:
                 h, w = SHORTCUT_MAP[key]
                 now_shortcut = shortcut_area[35 * h + 4:35 * h + 30, 35 * w + 4:35 * w + 30]
                 cv2.imwrite('./logs/debug/shortcuts/{}_{}.jpg'.format(key, now_time), now_shortcut)
-                if utils.image_same(now_shortcut, self.shortcuts[key]):
-                    utils.insert_player_command(key, 1, down_time=value["down_time"], up_time=value["up_time"])
-                else:
-                    print("skill ", key, "at", now_time, "is still cooldown")
+                if utils.multi_match(shortcut_area, self.shortcuts[key], threshold = 0.95):
+                # if utils.image_same(now_shortcut, self.shortcuts[key]):
+                    utils.insert_player_command(key, down_time=value["down_time"], up_time=value["up_time"])
 
     # @staticmethod
     # @utils.

@@ -40,21 +40,23 @@ class Reader:
 
         config.last_checking_click = time.time()
         while True:
-            if not config.cropped or len(config.frames) == 0:
+            if len(config.frames) == 0:
                 time.sleep(0.01)
                 continue
             frame = config.frames[-1]
             if not config.calibrated:
-                tl, _ = utils.single_match(frame[:frame.shape[0] // 4,
-                                           :frame.shape[1] // 3],
-                                           config.MINIMAP_TEMPLATE_TL)
-                mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
+                # tl, _ = utils.single_match(frame[:frame.shape[0] // 4,
+                #                            :frame.shape[1] // 3],
+                #                            config.MINIMAP_TEMPLATE_TL)
+                # mm_tl = (tl[0] + 8, tl[1] + 20)  # minimap top left
+                mm_tl = (7, 42) # width, height
 
                 # Get the bottom right corner of the minimap
                 _, br = utils.single_match(frame[:frame.shape[0] // 4,
                                            :frame.shape[1] // 3],
                                            config.MINIMAP_TEMPLATE_BR)
                 mm_br = tuple(max(75, x - config.MINIMAP_BOTTOM_BORDER) for x in br)  # minimap bot right
+                print("minimap: {} {}".format(mm_tl, mm_br))
                 config.mm_ratio = (mm_br[0] - mm_tl[0]) / (mm_br[1] - mm_tl[1])
 
                 config.calibrated = True
@@ -116,7 +118,7 @@ class Reader:
                         print("detect bonus box")
                         now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
                         cv2.imwrite('./logs/debug/bonus/{}.jpg'.format(now_time), frame)
-                        for _ in range(3):
+                        for _ in range(5):
                             click((bonus[0][0] + config.MONITOR["left"],
                                    bonus[0][1] + config.MONITOR["top"] + 13))
                     # dialogue box
@@ -125,7 +127,7 @@ class Reader:
                         print("detect dialogue box")
                         now_time = time.strftime('%Y%m%d%H%M%S', time.localtime())
                         cv2.imwrite('./logs/debug/dialogue/{}.jpg'.format(now_time), frame)
-                        for _ in range(3):
+                        for _ in range(5):
                             click((dialogue[0][0] + config.MONITOR["left"],
                                    dialogue[0][1] + config.MONITOR["top"]))
                     config.last_checking_click = now

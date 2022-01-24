@@ -7,6 +7,7 @@ import win32con
 import win32api
 from ctypes import wintypes
 from random import random
+from src import config
 
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
@@ -231,3 +232,25 @@ def click(position, button='left'):
         win32api.SetCursorPos(position)
         win32api.mouse_event(down_event, position[0], position[1], 0, 0)
         win32api.mouse_event(up_event, position[0], position[1], 0, 0)
+
+
+@utils.run_if_enabled
+def execute_skill(key, down_time=0.05, up_time=0.1, manna=0., direction=True):
+    if config.player_status["mp"] > manna:
+        key_down(key)
+        if direction:
+            for i in range(int(down_time)):
+                if config.player_pos[0] > 0.5:
+                    key_down(key)
+                    key_down("left")
+                    time.sleep(0.8 + 0.4 * random())
+                    key_up("left")
+                else:
+                    key_down(key)
+                    key_down("right")
+                    time.sleep(0.8 + 0.4 * random())
+                    key_up("right")
+        else:
+            time.sleep(down_time * (0.8 + 0.4 * random()))
+        key_up(key)
+        time.sleep(up_time * (0.8 + 0.4 * random()))

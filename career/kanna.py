@@ -7,9 +7,18 @@ from src.commands import Command
 from src.vkeys import press, key_down, key_up
 
 SKILLS = {
-    "w": {"down_time": 0.2, "up_time": 0.2, "cooldown": True},  # 召唤式神
-    "f1": {"down_time": 0.2, "up_time": 0.2, "cooldown": True},  # 公主庇佑
-    "s": {"down_time": 0.5, "up_time": 0.7, "cooldown": True},  # 阴阳制灵符
+    "f5": {"down_time": 0.6, "up_time": 0.4, "cooldown": True, "manna": 50. / 150.},  # 公主庇佑:900
+    "f6": {"down_time": 0.6, "up_time": 0.4, "cooldown": True},  # 晓之阵集结：？
+    "5": {"down_time": 0.6, "up_time": 0.4, "cooldown": True},  # 英雄之回声：？
+    "t": {"down_time": 0.3, "up_time": 0.3, "cooldown": True},  # 霸王咆哮:?
+    "z": {"down_time": 0.3, "up_time": 0.1, "cooldown": True, "manna": 40. / 150.},  # 雪女召唤:360
+    "d": {"down_time": 1.5, "up_time": 0.3, "cooldown": True, "manna": 60. / 150.},  # 紫扇白狐:1740
+    "e": {"down_time": 10, "up_time": 0.5, "cooldown": True, "manna": 100. / 150., "direction": True},  # 破邪连击符:480
+    "f": {"down_time": 4, "up_time": 0.4, "cooldown": True, "manna": 70. / 150.},  # 妖蛇解封:3600
+    "g": {"down_time": 2.0, "up_time": 0.7, "cooldown": True, "manna": 100. / 150.},  # 一鬼踏歼： 2610
+    "v": {"down_time": 0.3, "up_time": 0.2, "cooldown": True, "manna": 40. / 150.},  # 召唤灵石:480
+    "w": {"down_time": 0.4, "up_time": 0.2, "cooldown": True},  # 召唤鬼神：600
+    "s": {"down_time": 1., "up_time": 0.3, "cooldown": True, "manna": 40. / 150.},  # 阴阳制灵符：1200
 }
 
 
@@ -119,11 +128,9 @@ class Buff(Command):
         self.buff_time = 0
 
     def main(self):
-        buffs = ['-', '0', 'f8', 'f7', 'f6', 'f5', 'f4', '5']
+        buffs = ['=', '0', '-', 'f12', 'f11', 'f10', 'f9', 'f8','f7']
         now = time.time()
-        if self.haku_time == 0 or now - self.haku_time > 46:
-            press('d', 2, up_time=0.3)
-            press('z', 2, up_time=0.3)
+        if self.haku_time == 0 or now - self.haku_time > 30:
             press('q', 1)
             self.haku_time = now
         if self.buff_time == 0 or now - self.buff_time > config.buff_cooldown:

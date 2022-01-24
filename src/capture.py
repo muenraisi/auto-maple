@@ -35,24 +35,29 @@ class Capture:
         with mss.mss() as sct:
             while True:
                 now_time = time.time()
-                if now_time - tmp_time > 300:
+                if now_time - tmp_time > 60:
                     header_monitor = {'top': br[1] - 31, 'left': config.MONITOR["left"], 'width': 1366, 'height': 31}
                     header_frame = np.array(sct.grab(header_monitor))
                     header_gray = cv2.cvtColor(header_frame, cv2.COLOR_BGR2GRAY)
                     if not utils.image_same(header_gray, config.HEADER_TEMPLATE):
-                        cv2.imwrite('./logs/debug/header/{}.jpg'.format(now_time), header_frame)
-                        print("WARN: the screen has been shifted, now cropped again")
-                    config.cropped = False
-                    config.MONITOR = {'top': 0, 'left': 0, 'width': 1400, 'height': 800}
-                frame = np.array(sct.grab(config.MONITOR))
-                if not config.cropped:
+                        cv2.imwrite('./logs/debug/header/{}.jpg'.format(time.strftime('%Y%m%d%H%M', time.localtime())), header_gray)
+                        print("WARN: the screen was shifted, now reset")
+                    config.MONITOR = None
+
+                if not config.MONITOR:
+                    frame = np.array(sct.grab(config.FULL_MONITOR))
                     # crop the monitor to the game windows
                     tl, br = utils.single_match(frame[:frame.shape[0] // 8,
                                                 :],
                                                 config.HEADER_TEMPLATE)
                     config.MONITOR = {'top': br[1], 'left': tl[0], 'width': 1366, 'height': 768}
+
+                    tmp_time = time.time()
+                    frame = np.array(sct.grab(config.MONITOR))
+                    config.frames.clear()
+                    config.frames.append(frame)
                     config.cropped = True
                     config.calibrated = False
-                    tmp_time = time.time()
                 else:
+                    frame = np.array(sct.grab(config.MONITOR))
                     config.frames.append(frame)

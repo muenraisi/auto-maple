@@ -254,17 +254,15 @@ def validate_boolean(boolean):
     raise ValueError
 
 
-def insert_player_command(key, n=1, down_time=0.05, up_time=0.1):
-    cmd = ([key], {"n": n, "down_time": down_time, "up_time": up_time})
+def insert_player_command(*args, **kwargs):
+    cmd = (args, kwargs)
     if cmd not in config.player_commands:
-        while True:
-            if config.player_command_lock:
-                time.sleep(0.1)
-            else:
-                config.player_commands.append(cmd)
-                if config.DEBUG:
-                    print("insert_player_command: ", key, n, down_time, up_time)
-                break
+        if config.player_command_lock:
+            time.sleep(0.1)
+        else:
+            config.player_commands.append(cmd)
+            if config.DEBUG:
+                print("insert_player_command: ", args, kwargs)
 
 
 def image_same(image1, image2):

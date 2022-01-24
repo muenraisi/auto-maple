@@ -7,9 +7,16 @@ from src.commands import Command
 from src.vkeys import press, key_down, key_up
 
 SKILLS = {
-    "w": {"down_time": 0.2, "up_time": 0.2, "cooldown": True},  # 召唤式神
-    "f1": {"down_time": 0.2, "up_time": 0.2, "cooldown": True},  # 公主庇佑
-    "s": {"down_time": 0.5, "up_time": 0.7, "cooldown": True},  # 阴阳制灵符
+    # "f1": {"down_time": 0.6, "up_time": 0.4, "cooldown": True, "manna": 50./150.},  # 公主庇佑:900
+    # "t": {"down_time": 0.3, "up_time": 0.3, "cooldown": True},  # 霸王咆哮:?
+    # "z": {"down_time": 0.3, "up_time": 0.1, "cooldown": True, "manna": 40./150.},  # 雪女召唤:360
+    "d": {"down_time": 1.5, "up_time": 0.3, "cooldown": True, "manna": 60. / 150.},  # 紫扇白狐:1740
+    # "e": {"down_time": 10, "up_time": 0.5, "cooldown": True, "manna": 100./150., "direction":True},  # 破邪连击符:480
+    "f": {"down_time": 4, "up_time": 0.4, "cooldown": True, "manna": 70. / 150.},  # 妖蛇解封:3600
+    "g": {"down_time": 2.0, "up_time": 0.7, "cooldown": True, "manna": 100. / 150.},  # 一鬼踏歼： 2610
+    # "v": {"down_time": 0.3, "up_time": 0.2, "cooldown": True, "manna": 40. /150.},  # 召唤灵石:480
+    "w": {"down_time": 0.4, "up_time": 0.2, "cooldown": True},  # 召唤鬼神：600
+    "s": {"down_time": 1., "up_time": 0.3, "cooldown": True, "manna": 40. / 150.},  # 阴阳制灵符：1200
 }
 
 

@@ -14,7 +14,10 @@ RESOLUTION = (1920, 1080)
 #################################
 # Describes the dimensions of the screen to capture with mss
 # MONITOR = {'top': 0, 'left': 0, 'width': 1366, 'height': 768}
-MONITOR = {'top': 0, 'left': 0, 'width': 1400, 'height': 800}
+
+FULL_MONITOR = {'top': 0, 'left': 0, 'width': RESOLUTION[0], 'height': RESOLUTION[1]}
+
+MONITOR = None
 
 # The distance between the top of the minimap and the top of the screen
 MINIMAP_TOP_BORDER = 4
@@ -34,7 +37,7 @@ MINIMAP_TEMPLATE_BR = cv2.imread('assets/minimap_br.jpg', 0)
 MINIMAP_TEMPLATE_TL = cv2.imread('assets/minimap_tl.jpg', 0)
 
 #
-HEADER_TEMPLATE = cv2.imread('assets/header_template.png', 0)
+HEADER_TEMPLATE = cv2.imread('assets/header_template.jpg', 0)
 
 # The player's symbol on the minimap
 PLAYER_TEMPLATE = cv2.imread('assets/player_template.png', 0)
@@ -86,9 +89,6 @@ ready = False
 
 # Describes whether the video capture has calibrated the minimap
 calibrated = False
-
-#
-cropped = False
 
 # Describes whether the keyboard listener is currently running
 listening = False
