@@ -77,7 +77,7 @@ class Point:
         :return:    This Point's heading.
         """
 
-        return f'Point at {self.location}' + (':' if self.commands else '')
+        return f'From ({round(config.player_pos[0], 3)}, {round(config.player_pos[1], 3)}) to point at  {self.location}' + (':' if self.commands else '')
 
 
 class Bot:
@@ -90,7 +90,7 @@ class Bot:
 
         pygame.mixer.init()
         Bot.alert = pygame.mixer.music
-        Bot.alert.load('./assets/风云插曲.mp3')
+        Bot.alert.load('./assets/'+config.ALERT_MUSIC)
 
         Bot.load_commands()
         Bot.load_routine()

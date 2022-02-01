@@ -104,13 +104,13 @@ class Pet:
         # cv2.imwrite("mp.jpg", mp_img)
         # time.sleep(10000)
 
-        if config.player_status["hp"] < 0.4:
+        if config.player_status["hp"] < 0.5:
             print("hp is ", config.player_status["hp"], "prepare to add hp")
             utils.insert_player_command("home", down_time=0.2)
             now_time = time.strftime('%Y%m%d%H%M', time.localtime())
             cv2.imwrite('./logs/debug/hp/{}_{}.jpg'.format(now_time, config.player_status["hp"]), frame)
 
-        if config.player_status["mp"] < 0.2:
+        if config.player_status["mp"] < 0.3:
             print("mp is ", config.player_status["mp"], "prepare to add mp")
             utils.insert_player_command("2", down_time=0.2)
             now_time = time.strftime('%Y%m%d%H%M', time.localtime())

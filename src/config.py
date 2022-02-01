@@ -31,6 +31,9 @@ DEBUG=True
 #           TEMPLATES           #
 #################################
 
+# alert music
+ALERT_MUSIC = "恭喜发财.mp3"
+
 # The bottom right corner of the minimap
 MINIMAP_TEMPLATE_BR = cv2.imread('assets/minimap_br.jpg', 0)
 # The topper left corner of the minimap
