@@ -97,7 +97,7 @@ class Adjust(Command):
                     counter -= 1
             else:
                 d_y = self.target[1] - config.player_pos[1]
-                if abs(d_y) > config.adjust_tolerance / math.sqrt(2):
+                if abs(d_y) > config.adjust_tolerance / math.sqrt(2)/2.:
                     if d_y < 0:
                         Teleport('up').main()
                     else:
@@ -147,7 +147,10 @@ class Teleport(Command):
             else:
                 press(config.KEYBOARD_JUMP, 1)
         else:
-            press(config.KEYBOARD_JUMP, 1)
+            if self.jump:
+                press(config.KEYBOARD_JUMP, 2)
+            else:
+                time.sleep(0.5)
 
         key_up(self.direction)
         if config.record_layout:
